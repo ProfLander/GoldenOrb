@@ -6,7 +6,3 @@
 	path = MCM Builder
 	url = git@github.com:ProfLander/mcm-builder.git
 	branch = master
-[submodule "mcm-builder-ex"]
-	path = MCM Builder Ex
-	url = git@github.com:ProfLander/mcm-builder-ex.git
-	branch = master

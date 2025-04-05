@@ -34,11 +34,12 @@
 
         "cl_math",
         "cl_function",
-        "cl_lens",
+        "cl_string",
         "cl_list",
+        "cl_table",
+        "cl_lens",
         "cl_logging",
         "cl_schedule",
-        "cl_string",
 
         "ui_mcm",
 

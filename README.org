@@ -23,8 +23,15 @@ Future:
 - And myriad other possibilities
 
 ** Installation
-- Add to a vanilla MO2 preset alongside *Parallax Reflex Sights* and *Shader 3D Scopes*, placing *GoldenOrb* at the bottom.
+- Install the following mods to a vanilla Mod Organizer 2 preset:
+  - [[https://github.com/ProfLander/mcm-builder][MCM Builder]] (use GitHub zip)
+  - [[https://github.com/ProfLander/mcm-builder-ex][MCM Builder Ex]] (use GitHub zip)
+  - [[https://github.com/ProfLander/common-lander][Common Lander]] (use GitHub zip)
+  - [[https://www.moddb.com/mods/stalker-anomaly/addons/parallax-reflex-sights][Parallax Reflex Sights]]
+  - [[https://www.moddb.com/mods/stalker-anomaly/addons/shader-3d-scopes][Shader 3D Scopes]]
+- Install this repository's zip via MO2, placing it last in the list
 - Clear shader cache.
+- Launch Anomaly
 - Once in-game, open the console and execute `g_firepos 1` and `g_firepos_zoom 1` to enable muzzle-based hitscan trajectory.
   - If either command fails, your modded exes are out of date.
 

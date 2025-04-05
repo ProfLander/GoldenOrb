@@ -5,23 +5,6 @@ Uses modded exe functionality to add or extend composable features affecting the
 
 Featurewise, the full mechanical span between immersive realism and arcadey shooter is under consideration; if it involves allowing the player a greater range of expression or reaction with regard to interaction with the game world, then it probably qualifies for inclusion.
 
-Implemented:
-- Detached reticle
-
-In Progress:
-- Fully-detached free aim
-- True bodycam effects
-
-Future:
-- Expanded reticle constraint forces
-- Physical recoil
-- GoldenEye / Perfect Dark style auto aim
-- Variable lean and crouch
-- Enhanced free look
-- Custom camera inertia
-- Inverse kinematic weapon positioning
-- And myriad other possibilities
-
 ** Installation
 - Install the following mods to a vanilla Mod Organizer 2 preset in order:
   - [[https://github.com/ProfLander/mcm-builder][MCM Builder]] (use GitHub zip)

@@ -8,7 +8,6 @@ Featurewise, the full mechanical span between immersive realism and arcadey shoo
 ** Installation
 - Install the following mods to a vanilla Mod Organizer 2 preset in order:
   - [[https://github.com/ProfLander/mcm-builder][MCM Builder]] (use GitHub zip)
-  - [[https://github.com/ProfLander/mcm-builder-ex][MCM Builder Ex]] (use GitHub zip)
   - [[https://github.com/ProfLander/common-lander][Common Lander]] (use GitHub zip)
   - [[https://www.moddb.com/mods/stalker-anomaly/addons/parallax-reflex-sights][Parallax Reflex Sights]]
   - [[https://www.moddb.com/mods/stalker-anomaly/addons/shader-3d-scopes][Shader 3D Scopes]]
@@ -26,9 +25,9 @@ Featurewise, the full mechanical span between immersive realism and arcadey shoo
 - Menus don't receive mouse input while in-game yet
   - For now, users are advised to make a save with their desired loadout before testing the new systems
 - Ironsights / scope alignment with the camera during free-aim is currently weapon-dependent
-- Currently-necessary HUD FOV overrides are only applied to vanilla weapons, and the AK-105 Shakal / Swamp Thing from BaS 
+- Currently-necessary HUD FOV overrides are only applied to vanilla weapons, and the AK-105 Shakal / Swamp Thing variants from BaS 
 - ADS zoom is not correctly overridden until the second map load.
-
+  
 ** Mod Compatibility
 *** Fundamental
 Will technically function without these, but with reduced functionality.

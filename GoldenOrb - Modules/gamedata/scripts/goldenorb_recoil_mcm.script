@@ -235,7 +235,6 @@ inject_recoil_spring = system("inject_recoil_spring")
    :without({"springs", "recoil"})
    :writes({"springs", "recoil"})
    :via(function()
-      printf("inject recoil spring")
       return {
          springs = {
             recoil = {
@@ -255,7 +254,6 @@ inject_recoil_matrix = system("inject_recoil_matrix")
    :without({"matrices", "recoil"})
    :writes({"matrices", "recoil"})
    :via(function()
-      printf("inject recoil matrix")
       return {
          matrices = {
             recoil = {
@@ -282,7 +280,6 @@ recoil_weapon = system("recoil_weapon")
       {"matrices", "recoil", "hud"}
    )
    :via(function(state)
-      printf("recoil weapon")
       control_fac = control_fac + kick_multiplier:get()
 
       local id = state.wpn:id()
@@ -414,8 +411,6 @@ integrate_recoil = system("integrate_recoil")
       {"matrices", "recoil", "hud"}
    )
    :via(function(state)
-      printf("integrate recoil")
-
       control_fac = control_fac + spring_1d(
          0,
          control_strength:get(),
@@ -468,8 +463,6 @@ apply_actor_recoil = system("apply_actor_recoil")
       {"matrices", "actor"}
    )
    :via(function(state)
-      printf("apply actor recoil")
-
       return {
          matrices = {
             actor = matrix():mul(
@@ -493,8 +486,6 @@ apply_camera_recoil = system("apply_camera_recoil")
       {"matrices", "camera"}
    )
    :via(function(state)
-      printf("apply camera recoil")
-
       return {
          matrices = {
             camera = matrix():mul(
@@ -518,8 +509,6 @@ apply_hud_recoil = system("apply_hud_recoil")
       {"matrices", "hud"}
    )
    :via(function(state)
-      printf("apply hud recoil")
-
       return {
          matrices = {
             hud = matrix():mul(

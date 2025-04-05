@@ -27,11 +27,13 @@ Future:
 - Clear shader cache.
 - Once in-game, open the console and execute `g_firepos 1` and `g_firepos_zoom 1` to enable muzzle-based hitscan trajectory.
   - If either command fails, your modded exes are out of date.
-- To enable debug visualization, set `DRAW` to true in one of the `robodolg_*.script` modules.
-- To switch between features, modify the commented lines in `goldenorb_modifiers.script`.
-  - The three of primary interest at present are `offset_aim`, `free_aim`, and `body_cam`.
 
 ** Known Issues
+- Lean, Crouch and Prone are not implemented yet
+- Menus don't receive mouse input while in-game yet
+  - For now, users are advised to make a save with their desired loadout before testing the new systems
+- Ironsights / scope alignment with the camera during free-aim is currently weapon-dependent
+- Currently-necessary HUD FOV overrides are only applied to vanilla weapons, and the AK-105 Shakal / Swamp Thing from BaS 
 - ADS zoom is not correctly overridden until the second map load.
 
 ** Mod Compatibility

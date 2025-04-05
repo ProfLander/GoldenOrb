@@ -15,10 +15,11 @@ Featurewise, the full mechanical span between immersive realism and arcadey shoo
   - When warned about missing directories, choose to install anyway
     - This is a temporary compromise alongside manually-installed dependencies, until GitHub Actions deployment is implemented
   - Place it last in the load order
-- Clear shader cache.
+- Clear shader cache
 - Launch Anomaly
-- Once in-game, open the console and execute `g_firepos 1` and `g_firepos_zoom 1` to enable muzzle-based hitscan trajectory.
-  - If either command fails, your modded exes are out of date.
+- Once in-game, open the console and execute ~g_firepos 1~ and ~g_firepos_zoom 1~ to enable muzzle-based bullet trajectory
+  - If either command fails, your modded exes are out of date
+- Set HUD FOV 1 via the options menu to ensure correct bullet trajectory
 
 ** Known Issues
 - Lean, Crouch and Prone are not implemented yet

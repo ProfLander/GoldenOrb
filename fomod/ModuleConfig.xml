@@ -11,9 +11,8 @@
               <!--<designer.metadata.do.not.edit> {"name":"GoldenOrb"}-->
               <description>GoldenOrb dependencies.</description>
               <files>
-		      <folder source="Common Lander/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="MCM Builder/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="MCM Builder Ex/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="dependencies/common-lander/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="dependencies/mcm-builder/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
               </files>
               <typeDescriptor>
                 <type name="Required"/>
@@ -23,21 +22,31 @@
               <!--<designer.metadata.do.not.edit> {"name":"GoldenOrb"}-->
               <description>Total camera and aiming overhaul for Anomaly.</description>
               <files>
-		      <folder source="GoldenOrb - Core/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="GoldenOrb - Modules/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="GoldenOrb - Shaders/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/goldenorb/core/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/goldenorb/modules/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/goldenorb/shaders/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
               </files>
               <typeDescriptor>
                 <type name="Required"/>
+              </typeDescriptor>
+            </plugin>
+            <plugin name="Disable HUD FOV">
+              <!--<designer.metadata.do.not.edit> {"name":"GoldenOrb"}-->
+              <description>Disables HUD FOV overrides for vanilla weapons.</description>
+              <files>
+		      <folder source="addons/disable-hud-fov/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+              </files>
+              <typeDescriptor>
+                <type name="Recommended"/>
               </typeDescriptor>
             </plugin>
             <plugin name="RoboDolg">
               <!--<designer.metadata.do.not.edit> {"name":"GoldenOrb"}-->
               <description>Vector HUD for Anomaly.</description>
               <files>
-		      <folder source="RoboDolg/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="RoboDolg - Vanilla/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="GoldenOrb - RoboDolg/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/robodolg/core/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/robodolg/vanilla/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/goldenorb/robodolg/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
               </files>
               <typeDescriptor>
                 <type name="Recommended"/>

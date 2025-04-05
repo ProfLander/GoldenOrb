@@ -1,8 +1,8 @@
 [submodule "common-lander"]
-	path = Common Lander
+	path = dependencies/common-lander
 	url = git@github.com:ProfLander/common-lander.git
 	branch = master
 [submodule "mcm-builder"]
-	path = MCM Builder
+	path = dependencies/mcm-builder
 	url = git@github.com:ProfLander/mcm-builder.git
 	branch = master

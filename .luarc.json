@@ -13,8 +13,6 @@
         "library": [
             "~/.local/src/anomaly-definitions/library",
             "~/games/stalker/stalker-anomaly/gamedata/scripts",
-            "~/games/stalker/original-mods/Lander Math/gamedata/scripts",
-            "~/games/stalker/original-mods/MCM Builder/gamedata/scripts",
         ],
     },
     "hint": {
@@ -35,6 +33,12 @@
         "actor_menu",
 
         "cl_math",
+        "cl_function",
+        "cl_lens",
+        "cl_list",
+        "cl_logging",
+        "cl_schedule",
+        "cl_string",
 
         "ui_mcm",
 
@@ -47,8 +51,6 @@
         "goldenorb_camera",
         "goldenorb_conditions",
         "goldenorb_effects",
-        "goldenorb_lens",
-        "goldenorb_logging",
         "goldenorb_mod_animate_sin_cos",
         "goldenorb_mod_body_cam_mcm",
         "goldenorb_mod_free_aim_mcm",
@@ -64,11 +66,7 @@
         "goldenorb_joint",
         "goldenorb_spring",
         "goldenorb_aim",
-        "goldenorb_string",
-        "goldenorb_list",
         "goldenorb_table",
-        "goldenorb_function",
-        "goldenorb_schedule",
         "goldenorb_camera_mcm",
         "goldenorb_hands_mcm",
 

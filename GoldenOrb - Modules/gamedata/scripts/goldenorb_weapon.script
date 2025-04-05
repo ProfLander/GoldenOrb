@@ -33,8 +33,8 @@ local DEG2RAD = cl_math.DEG2RAD
 local inject_actor = goldenorb_actor.inject_actor
 
 --- Table
-map = goldenorb_table.map
-foreach = goldenorb_table.foreach
+map = cl_table.map
+foreach = cl_table.foreach
 
 --- Math
 local hpb_to_direction = cl_math.hpb_to_direction

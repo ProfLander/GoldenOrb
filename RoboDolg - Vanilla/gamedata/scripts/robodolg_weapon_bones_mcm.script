@@ -19,7 +19,7 @@ local hpb_to_direction = cl_math.hpb_to_direction
 local tree = robodolg_vanilla_mcm.tree
 
 --- Table
-local foreach = goldenorb_table.foreach
+local foreach = cl_table.foreach
 
 --- MCM Builder
 local ImageWithText = mcm_builder.ImageWithText

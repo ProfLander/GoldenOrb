@@ -16,7 +16,7 @@ local foreach_list = cl_list.foreach
 local id = cl_function.id
 
 --- Table
-local foreach_table = goldenorb_table.foreach
+local foreach_table = cl_table.foreach
 
 --- Math
 local TAU = cl_math.TAU

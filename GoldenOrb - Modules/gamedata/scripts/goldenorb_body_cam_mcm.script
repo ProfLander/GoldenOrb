@@ -21,7 +21,7 @@ local map = cl_list.map
 local fold = cl_list.fold
 
 --- Table
-local foreach = goldenorb_table.foreach
+local foreach = cl_table.foreach
 
 --- Function
 local compose = cl_function.compose

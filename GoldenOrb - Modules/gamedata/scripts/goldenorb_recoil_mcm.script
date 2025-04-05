@@ -36,7 +36,7 @@ local spring_1d = goldenorb_spring.spring_1d
 local SP_ANGULAR = goldenorb_spring.SP_ANGULAR
 
 --- Table
-local foreach = goldenorb_table.foreach
+local foreach = cl_table.foreach
 
 --- Math
 local deg = cl_math.deg

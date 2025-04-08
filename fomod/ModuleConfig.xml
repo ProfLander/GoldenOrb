@@ -24,7 +24,8 @@
               <files>
 		      <folder source="addons/goldenorb/core/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
 		      <folder source="addons/goldenorb/modules/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
-		      <folder source="addons/goldenorb/shaders/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/goldenorb/shaders-3dss/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
+		      <folder source="addons/goldenorb/shaders-prs/gamedata" destination="gamedata" priority="0" alwaysInstall="false" installIfUsable="false"/>
               </files>
               <typeDescriptor>
                 <type name="Required"/>

@@ -24,7 +24,7 @@ local system = cl_schedule.system
 local I_READ = cl_schedule.I_READ
 
 --- GoldenOrb Main
-local phase_done = goldenorb_main.phase_done
+local phase_done = gorb_main.phase_done
 
 --- Logging
 local log = robodolg_logging.log

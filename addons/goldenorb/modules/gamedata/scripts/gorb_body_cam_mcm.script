@@ -10,8 +10,8 @@
 local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 
 --- Main
-local goldenorb_before_modify_state = goldenorb_main.goldenorb_before_modify_state
-local goldenorb_after_modify_state = goldenorb_main.goldenorb_after_modify_state
+local gorb_before_modify_state = gorb_main.gorb_before_modify_state
+local gorb_after_modify_state = gorb_main.gorb_after_modify_state
 
 --- Math
 local deg = cl_math.deg
@@ -32,7 +32,7 @@ local I_READ_MAYBE = cl_schedule.I_READ_MAYBE
 local O_WRITE_MAYBE = cl_schedule.O_WRITE_MAYBE
 
 --- Camera
-local get_camera_aim_point = goldenorb_camera_mcm.get_camera_aim_point
+local get_camera_aim_point = gorb_camera_mcm.get_camera_aim_point
 
 --- String
 local parse_vector = cl_string.parse_vector
@@ -56,7 +56,7 @@ BONE_ROOT = "root_stalker"
 
 -- State
 
-page = goldenorb_mcm.tree:pages("bodycam")
+page = gorb_mcm.tree:pages("bodycam")
 
 page:settings(ImageWithText.new("body_cam_title"):text("body_cam"))
 
@@ -154,8 +154,8 @@ function get_actor_rotation(state)
 end
 
 body_cam = system("body_cam")
-   :runs_after(goldenorb_before_modify_state)
-   :runs_before(goldenorb_after_modify_state)
+   :runs_after(gorb_before_modify_state)
+   :runs_before(gorb_after_modify_state)
    :reads("actor")
    :maybe_reads("wpn")
    :inputs({ hud = { hands_orientation = I_READ_MAYBE }})

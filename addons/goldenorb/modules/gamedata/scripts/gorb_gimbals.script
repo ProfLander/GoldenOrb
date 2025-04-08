@@ -10,8 +10,8 @@
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 --- Schedule
 local system = cl_schedule.system
@@ -24,8 +24,8 @@ C_GIMBALS = "gimbals"
 
 --- Inject the gimbal container into the state
 inject_gimbals = system("inject_gimbals")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :without(C_GIMBALS)
    :writes(C_GIMBALS)
    :via(function()

@@ -23,14 +23,14 @@ local Checkbox = mcm_builder.Checkbox
 local Trackbar = mcm_builder.Trackbar
 
 --- Robodolg
-local tree = goldenorb_robodolg_mcm.tree
+local tree = gorb_robodolg_mcm.tree
 
 --- Schedule
 local system = cl_schedule.system
 local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 
 --- Main
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- Function
 local advise_before = cl_function.advise_before
@@ -126,7 +126,7 @@ end
 --- Actor
 draw_actor_crosshair = system("draw_actor_crosshair")
    :reads({"robodolg_cache", "actor"})
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :when(function()
       return draw_actor:get()
    end)
@@ -144,7 +144,7 @@ draw_actor_crosshair = system("draw_actor_crosshair")
 --- Camera
 draw_camera_crosshair = system("draw_camera_crosshair")
    :maybe_reads({"robodolg_cache", "camera"})
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :when(function()
       return draw_camera:get()
    end)
@@ -165,7 +165,7 @@ draw_hands_crosshair = system("draw_hands_crosshair")
       {"robodolg_cache", "hands"},
       {"robodolg_cache", "camera"}
    )
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :when(function()
          return draw_hands:get()
    end)
@@ -191,7 +191,7 @@ draw_weapon_crosshair = system("draw_weapon_crosshair")
       {"robodolg_cache", "weapon"},
       {"robodolg_cache", "camera"}
    )
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :when(function()
       return draw_weapon:get()
    end)

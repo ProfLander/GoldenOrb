@@ -7,7 +7,7 @@
 -- Imports
 
 --- Main
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- Schedule
 local system = cl_schedule.system
@@ -27,7 +27,7 @@ local draw_ngon = robodolg_shapes.draw_ngon
 local ui_2d = robodolg_camera.ui_2d
 
 --- RoboDolg
-local tree = goldenorb_robodolg_mcm.tree
+local tree = gorb_robodolg_mcm.tree
 
 --- MCM Builder
 local ImageWithText = mcm_builder.ImageWithText
@@ -47,7 +47,7 @@ local should_draw = page:settings(
 
 --- Line from actor to its aim point
 draw_actor_aim = system("draw_actor_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads({"robodolg_cache", "actor"})
    :when(function()
       return should_draw:get()
@@ -64,7 +64,7 @@ draw_actor_aim = system("draw_actor_aim")
 
 --- Circle around hands origin
 draw_hands_origin = system("draw_hands_origin")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads({"robodolg_cache", "hands"})
    :when(function()
       return should_draw:get()
@@ -81,7 +81,7 @@ draw_hands_origin = system("draw_hands_origin")
 
 --- Line from hands origin to hands aim point
 draw_hands_aim = system("draw_hands_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads({"robodolg_cache", "hands"})
    :when(function()
       return should_draw:get()
@@ -99,7 +99,7 @@ draw_hands_aim = system("draw_hands_aim")
 
 --- Line from weapon barrel to weapon aim point
 draw_weapon_aim = system("draw_weapon_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads({"robodolg_cache", "weapon"})
    :when(function()
       return should_draw:get()
@@ -116,7 +116,7 @@ draw_weapon_aim = system("draw_weapon_aim")
 
 --- Line from actor aim point to camera aim point
 draw_actor_camera_aim = system("draw_actor_camera_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads(
       {"robodolg_cache", "actor"},
       {"robodolg_cache", "camera"}
@@ -135,7 +135,7 @@ draw_actor_camera_aim = system("draw_actor_camera_aim")
 
 --- Line from camera aim point to hands aim point
 draw_camera_hands_aim = system("draw_camera_hands_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads(
       {"robodolg_cache", "camera"},
       {"robodolg_cache", "hands"}
@@ -154,7 +154,7 @@ draw_camera_hands_aim = system("draw_camera_hands_aim")
 
 --- Line from camera aim point to weapon aim point
 draw_camera_weapon_aim = system("draw_camera_weapon_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads(
       {"robodolg_cache", "camera"},
       {"robodolg_cache", "weapon"}
@@ -173,7 +173,7 @@ draw_camera_weapon_aim = system("draw_camera_weapon_aim")
 
 --- Triangle comprised of hands origin, hands aim, and weapon barrel
 draw_hands_weapon_aim = system("draw_hands_weapon_aim")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads(
       {"robodolg_cache", "hands"},
       {"robodolg_cache", "weapon"}

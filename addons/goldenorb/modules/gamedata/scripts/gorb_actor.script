@@ -12,16 +12,16 @@ local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
-local goldenorb_before_apply_state = goldenorb_main.goldenorb_before_apply_state
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
+local gorb_before_apply_state = gorb_main.gorb_before_apply_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- Gimbals
-local C_GIMBALS = goldenorb_gimbals.C_GIMBALS
+local C_GIMBALS = gorb_gimbals.C_GIMBALS
 
 --- Matrices
-local C_MATRICES = goldenorb_matrices.C_MATRICES
+local C_MATRICES = gorb_matrices.C_MATRICES
 
 -- Constants
 
@@ -31,8 +31,8 @@ C_ACTOR = "actor"
 
 --- Inject the player actor into the state
 inject_actor = system("inject_actor")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :writes(C_ACTOR)
    :via(function()
       return {
@@ -43,8 +43,8 @@ inject_actor = system("inject_actor")
 
 --- Inject the actor gimbal
 inject_actor_gimbal = system("inject_actor_gimbal")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :without({C_GIMBALS, C_ACTOR})
    :writes({C_GIMBALS, C_ACTOR})
    :via(function()
@@ -59,7 +59,7 @@ inject_actor_gimbal = system("inject_actor_gimbal")
 --- Derive the actor matrix from the actor gimbal
 derive_actor_matrix = system("derive_actor_matrix")
    :runs_after(inject_actor_gimbal)
-   :runs_before(goldenorb_after_build_state)
+   :runs_before(gorb_after_build_state)
    :reads(C_ACTOR, {C_GIMBALS, C_ACTOR})
    :writes({C_MATRICES, C_ACTOR})
    :via(function(state)
@@ -76,8 +76,8 @@ derive_actor_matrix = system("derive_actor_matrix")
 
 --- Apply the actor matrix
 apply_actor_matrix = system("apply_actor_matrix")
-   :runs_after(goldenorb_before_apply_state)
-   :runs_before(goldenorb_after_apply_state)
+   :runs_after(gorb_before_apply_state)
+   :runs_before(gorb_after_apply_state)
    :reads(C_ACTOR, {C_MATRICES, C_ACTOR}, {C_MATRICES, "camera"})
    :via(function(state)
       local actor_hpb = state[C_MATRICES][C_ACTOR]:getHPB()

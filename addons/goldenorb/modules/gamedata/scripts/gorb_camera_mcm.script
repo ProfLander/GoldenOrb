@@ -7,30 +7,30 @@
 -- Imports
 
 --- Goldenorb
-local tree = goldenorb_mcm.tree
+local tree = gorb_mcm.tree
 
 --- Schedule
 local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
 
-local goldenorb_before_modify_state = goldenorb_main.goldenorb_before_modify_state
-local goldenorb_after_modify_state = goldenorb_main.goldenorb_after_modify_state
+local gorb_before_modify_state = gorb_main.gorb_before_modify_state
+local gorb_after_modify_state = gorb_main.gorb_after_modify_state
 
-local goldenorb_before_apply_state = goldenorb_main.goldenorb_before_apply_state
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_before_apply_state = gorb_main.gorb_before_apply_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- Gimbals
-local C_GIMBALS = goldenorb_gimbals.C_GIMBALS
+local C_GIMBALS = gorb_gimbals.C_GIMBALS
 
 --- Matrices
-local C_MATRICES = goldenorb_matrices.C_MATRICES
+local C_MATRICES = gorb_matrices.C_MATRICES
 
 --- Matrices
-local C_ACTOR = goldenorb_actor.C_ACTOR
+local C_ACTOR = gorb_actor.C_ACTOR
 
 --- Schedule
 local system = cl_schedule.system
@@ -124,8 +124,8 @@ C_CAM_FLAG = "_cam_custom_position_direction"
 
 --- Inject the camera gimbal into the state
 inject_camera_gimbal = system("inject_camera_gimbal")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :without({C_GIMBALS, C_CAMERA})
    :writes({C_GIMBALS, C_CAMERA})
    :via(function()
@@ -140,7 +140,7 @@ inject_camera_gimbal = system("inject_camera_gimbal")
 --- Derive the camera matrix from the camera gimbal
 derive_camera_matrix = system("derive_camera_matrix")
    :runs_after(inject_camera_gimbal)
-   :runs_before(goldenorb_after_build_state)
+   :runs_before(gorb_after_build_state)
    :reads({C_GIMBALS, C_CAMERA})
    :writes({C_MATRICES, C_CAMERA})
    :via(function(state)
@@ -153,7 +153,7 @@ derive_camera_matrix = system("derive_camera_matrix")
    :during(LEVEL_CALL)
 
 actor_relative_camera = system("actor_relative_camera")
-   :runs_before(goldenorb_before_apply_state)
+   :runs_before(gorb_before_apply_state)
    :reads({C_MATRICES, C_ACTOR}, {C_MATRICES, C_CAMERA})
    :writes({C_MATRICES, C_CAMERA})
    :via(function(state)
@@ -170,7 +170,7 @@ actor_relative_camera = system("actor_relative_camera")
 
 camera_arm = system("camera_arm")
    :runs_after(actor_relative_camera)
-   :runs_before(goldenorb_before_apply_state)
+   :runs_before(gorb_before_apply_state)
    :reads({C_MATRICES, C_CAMERA})
    :writes({C_MATRICES, C_CAMERA})
    :via(function(state)
@@ -190,8 +190,8 @@ camera_arm = system("camera_arm")
 
 --- Apply custom camera state if a matrix is present
 apply_camera_matrix = system("apply_camera_matrix")
-   :runs_after(goldenorb_before_apply_state)
-   :runs_before(goldenorb_after_apply_state)
+   :runs_after(gorb_before_apply_state)
+   :runs_before(gorb_after_apply_state)
    :reads({C_MATRICES, C_CAMERA})
    :writes(C_CAM_FLAG)
    :via(function(state)
@@ -211,8 +211,8 @@ apply_camera_matrix = system("apply_camera_matrix")
 
 --- Reset custom camera state if no matrix is present
 reset_camera_matrix = system("reset_camera_matrix")
-   :runs_after(goldenorb_before_apply_state)
-   :runs_before(goldenorb_after_apply_state)
+   :runs_after(gorb_before_apply_state)
+   :runs_before(gorb_after_apply_state)
    :with(C_CAM_FLAG)
    :without({C_MATRICES, C_CAMERA})
    :writes(C_CAM_FLAG)

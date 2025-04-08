@@ -7,13 +7,13 @@
 -- Imports
 
 --- HUD offset rotation
-local goldenorb_before_modify_state = goldenorb_main.goldenorb_before_modify_state
-local goldenorb_after_modify_state = goldenorb_main.goldenorb_after_modify_state
+local gorb_before_modify_state = gorb_main.gorb_before_modify_state
+local gorb_after_modify_state = gorb_main.gorb_after_modify_state
 
 --- Aim
-local page = goldenorb_aim_mcm.page
-local aim_type = goldenorb_aim_mcm.aim_type
-local AIM_OFFSET = goldenorb_aim_mcm.AIM_OFFSET
+local page = gorb_aim_mcm.page
+local aim_type = gorb_aim_mcm.aim_type
+local AIM_OFFSET = gorb_aim_mcm.AIM_OFFSET
 
 --- String
 local parse_vector = cl_string.parse_vector
@@ -56,8 +56,8 @@ local sensitivity = page:settings(
 -- Implementation
 
 offset_aim = system("offset_aim")
-   :runs_after(goldenorb_before_modify_state)
-   :runs_before(goldenorb_after_modify_state)
+   :runs_after(gorb_before_modify_state)
+   :runs_before(gorb_after_modify_state)
    :reads("joint_aim", "spring_aim", "cam")
    :inputs({
       cam = {

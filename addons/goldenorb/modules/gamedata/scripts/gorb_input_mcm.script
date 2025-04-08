@@ -13,27 +13,27 @@ local ON_BEFORE_MOUSE_MOVE = cl_schedule.ON_BEFORE_MOUSE_MOVE
 local ON_KEY_PRESS = cl_schedule.ON_KEY_PRESS
 
 --- Main
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 --- Gimbal
-local C_GIMBALS = goldenorb_gimbals.C_GIMBALS
+local C_GIMBALS = gorb_gimbals.C_GIMBALS
 
 --- Actor
-local C_ACTOR = goldenorb_actor.C_ACTOR
+local C_ACTOR = gorb_actor.C_ACTOR
 
 --- Camera
-local C_CAMERA = goldenorb_camera_mcm.C_CAMERA
+local C_CAMERA = gorb_camera_mcm.C_CAMERA
 
 --- Weapon
-local C_HUD = goldenorb_weapon.C_HUD
+local C_HUD = gorb_weapon.C_HUD
 
 --- Aim
-local aim_type = goldenorb_aim_mcm.aim_type
-local AIM_FREE = goldenorb_aim_mcm.AIM_FREE
+local aim_type = gorb_aim_mcm.aim_type
+local AIM_FREE = gorb_aim_mcm.AIM_FREE
 
 --- GoldenOrb
-local tree = goldenorb_mcm.tree
+local tree = gorb_mcm.tree
 
 --- MCM Builder
 local KeybindBox = mcm_builder.KeybindBox
@@ -63,8 +63,8 @@ GT_HUD = 2
 GT_MAX = 3
 
 inject_gimbal_target = system("inject_gimbal_target")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :without(C_GIMBAL_TARGET)
    :writes(C_GIMBAL_TARGET)
    :via(function()

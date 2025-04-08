@@ -11,26 +11,26 @@ local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
-local goldenorb_before_apply_state = goldenorb_main.goldenorb_before_apply_state
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
+local gorb_before_apply_state = gorb_main.gorb_before_apply_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- Actor
-local C_ACTOR = goldenorb_actor.C_ACTOR
+local C_ACTOR = gorb_actor.C_ACTOR
 
 --- Gimbals
-local C_GIMBALS = goldenorb_gimbals.C_GIMBALS
-local inject_gimbals = goldenorb_gimbals.inject_gimbals
+local C_GIMBALS = gorb_gimbals.C_GIMBALS
+local inject_gimbals = gorb_gimbals.inject_gimbals
 
 --- Matrices
-local C_MATRICES = goldenorb_matrices.C_MATRICES
+local C_MATRICES = gorb_matrices.C_MATRICES
 
 --- Math
 local RAD2DEG = cl_math.RAD2DEG
 local DEG2RAD = cl_math.DEG2RAD
 
 --- Actor
-local inject_actor = goldenorb_actor.inject_actor
+local inject_actor = gorb_actor.inject_actor
 
 --- Table
 map = cl_table.map
@@ -287,7 +287,7 @@ C_HUD = "hud"
 --- Inject the actor's active weapon into the state
 inject_weapon = system("inject_weapon")
    :runs_after(inject_actor)
-   :runs_before(goldenorb_after_build_state)
+   :runs_before(gorb_after_build_state)
    :maybe_reads(C_ACTOR)
    :writes(C_WEAPON)
    :via(function(state)
@@ -300,7 +300,7 @@ inject_weapon = system("inject_weapon")
 --- Inject the weapon's HUD parameters into the state
 inject_hud = system("inject_hud")
    :runs_after(inject_weapon)
-   :runs_before(goldenorb_after_build_state)
+   :runs_before(gorb_after_build_state)
    :reads(C_WEAPON)
    :writes(C_HUD)
    :via(function(state)
@@ -312,7 +312,7 @@ inject_hud = system("inject_hud")
 
 inject_hud_gimbal = system("inject_hud_gimbal")
    :runs_after(inject_gimbals, inject_hud)
-   :runs_before(goldenorb_after_build_state)
+   :runs_before(gorb_after_build_state)
    :reads(C_HUD)
    :without({C_GIMBALS, C_HUD})
    :writes({C_GIMBALS, C_HUD})
@@ -327,7 +327,7 @@ inject_hud_gimbal = system("inject_hud_gimbal")
 
 derive_hud_matrix = system("derive_hud_matrix")
    :runs_after(inject_matrices, inject_hud, inject_hud_gimbal)
-   :runs_before(goldenorb_after_build_state)
+   :runs_before(gorb_after_build_state)
    :maybe_reads(C_HUD, {C_GIMBALS, C_HUD})
    :with(C_MATRICES)
    :writes({C_MATRICES, C_HUD})
@@ -362,7 +362,7 @@ derive_hud_matrix = system("derive_hud_matrix")
    :during(LEVEL_CALL)
 
 apply_hud_matrix = system("apply_hud_matrix")
-   :runs_after(goldenorb_before_apply_state)
+   :runs_after(gorb_before_apply_state)
    :runs_before(apply_hud)
    :reads({C_MATRICES, C_HUD})
    :writes(
@@ -382,8 +382,8 @@ apply_hud_matrix = system("apply_hud_matrix")
 
 --- Apply aggregated state values to the HUD adjuster
 apply_hud = system("apply_weapon_hud")
-   :runs_after(goldenorb_before_apply_state)
-   :runs_before(goldenorb_after_apply_state)
+   :runs_after(gorb_before_apply_state)
+   :runs_before(gorb_after_apply_state)
    :maybe_reads(C_HUD)
    :via(function(state)
       local hud = state[C_HUD]

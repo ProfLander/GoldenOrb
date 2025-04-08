@@ -5,15 +5,15 @@ local system = cl_schedule.system
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main 
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
 
 --- Weapon
-local get_weapon_aim_point = goldenorb_weapon.get_weapon_aim_point
-local get_fire_bone_position = goldenorb_weapon.get_fire_bone_position
-local get_fire_bone_rotation = goldenorb_weapon.get_fire_bone_rotation
+local get_weapon_aim_point = gorb_weapon.get_weapon_aim_point
+local get_fire_bone_position = gorb_weapon.get_fire_bone_position
+local get_fire_bone_rotation = gorb_weapon.get_fire_bone_rotation
 
 cache = system("cache")
-   :runs_before(goldenorb_before_build_state)
+   :runs_before(gorb_before_build_state)
    :reads(
       "actor",
       "wpn",

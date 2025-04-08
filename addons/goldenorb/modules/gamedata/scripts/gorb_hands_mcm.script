@@ -10,10 +10,10 @@
 local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 
 --- Main
-local goldenorb_before_modify_state = goldenorb_main.goldenorb_before_modify_state
+local gorb_before_modify_state = gorb_main.gorb_before_modify_state
 
 --- Weapon
-local get_hud_number = goldenorb_weapon.get_hud_number
+local get_hud_number = gorb_weapon.get_hud_number
 
 --- Math
 local hpb_to_direction = cl_math.hpb_to_direction
@@ -79,7 +79,7 @@ end
 
 --- Counteract ADS rotation offset to keep the weapon centered
 apply_hud_offset_rot = system("apply_hud_offset_rot")
-   :runs_before(goldenorb_before_modify_state)
+   :runs_before(gorb_before_modify_state)
    :reads("wpn", {"hud", "aim_hud_offset_rot"}, {"matrices", "hud"})
    :writes({"matrices", "hud"})
    :via(function(state)

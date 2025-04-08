@@ -7,18 +7,18 @@
 -- Imports
 
 --- Main
-local phase_build_state = goldenorb_main.phase_build_state
+local phase_build_state = gorb_main.phase_build_state
 
 --- Joint
-local joint = goldenorb_joint.joint
+local joint = gorb_joint.joint
 
 --- MCM Builder
 local ImageWithText = mcm_builder.ImageWithText
 local List = mcm_builder.List
 
 --- Spring
-local mcm_spring = goldenorb_spring.mcm_spring
-local SP_LINEAR = goldenorb_spring.SP_LINEAR
+local mcm_spring = gorb_spring.mcm_spring
+local SP_LINEAR = gorb_spring.SP_LINEAR
 
 --- Schedule
 local system = cl_schedule.system
@@ -41,7 +41,7 @@ AIM_FREE = 2
 -- State
 
 --- MCM Page
-page = goldenorb_mcm.tree:pages("aim")
+page = gorb_mcm.tree:pages("aim")
 
 --- Page Title
 page:settings(

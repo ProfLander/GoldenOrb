@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
--- GoldenOrb: Springs
+-- GoldenOrb: Matrices
 ----------------------------------------------------------------------------
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
@@ -11,24 +11,24 @@ local system = cl_schedule.system
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 -- Constants
 
-C_SPRINGS = "springs"
+C_MATRICES = "matrices"
 
 -- Implementation
 
 --- Inject the matrix container into the state
-inject_springs = system("inject_springs")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
-   :without(C_SPRINGS)
-   :writes(C_SPRINGS)
+inject_matrices = system("inject_matrices")
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
+   :without(C_MATRICES)
+   :writes(C_MATRICES)
    :via(function()
       return {
-         [C_SPRINGS] = {}
+         [C_MATRICES] = {}
       }
    end)
    :during(LEVEL_CALL)

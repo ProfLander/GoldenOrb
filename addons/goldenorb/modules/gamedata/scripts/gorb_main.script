@@ -19,32 +19,32 @@ local const = cl_function.const
 -- Constants
 
 --- State build barriers
-goldenorb_before_build_state = system("goldenorb_before_build_state")
+gorb_before_build_state = system("gorb_before_build_state")
    :via(const(nil))
    :during(LEVEL_CALL)
 
-goldenorb_after_build_state = system("goldenorb_after_build_state")
-   :runs_after(goldenorb_before_build_state)
+gorb_after_build_state = system("gorb_after_build_state")
+   :runs_after(gorb_before_build_state)
    :via(const(nil))
    :during(LEVEL_CALL)
 
 --- State modify barriers
-goldenorb_before_modify_state = system("goldenorb_before_modify_state")
+gorb_before_modify_state = system("gorb_before_modify_state")
    :via(const(nil))
    :during(ACTOR_ON_UPDATE)
 
-goldenorb_after_modify_state = system("goldenorb_after_modify_state")
-   :runs_after(goldenorb_before_modify_state)
+gorb_after_modify_state = system("gorb_after_modify_state")
+   :runs_after(gorb_before_modify_state)
    :via(const(nil))
    :during(ACTOR_ON_UPDATE)
 
 --- State apply barriers
-goldenorb_before_apply_state = system("goldenorb_before_apply_state")
-   :runs_after(goldenorb_after_modify_state)
+gorb_before_apply_state = system("gorb_before_apply_state")
+   :runs_after(gorb_after_modify_state)
    :via(const(nil))
    :during(ACTOR_ON_UPDATE)
 
-goldenorb_after_apply_state = system("goldenorb_after_apply_state")
-   :runs_after(goldenorb_before_apply_state)
+gorb_after_apply_state = system("gorb_after_apply_state")
+   :runs_after(gorb_before_apply_state)
    :via(const(nil))
    :during(ACTOR_ON_UPDATE)

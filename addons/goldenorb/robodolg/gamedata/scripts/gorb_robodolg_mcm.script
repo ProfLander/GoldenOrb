@@ -15,8 +15,8 @@ local system = cl_schedule.system
 local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
 
 --- Main
-local goldenorb_before_modify_state = goldenorb_main.goldenorb_before_modify_state
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_before_modify_state = gorb_main.gorb_before_modify_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- Robodolg
 local mcm_tree = robodolg_mcm.tree
@@ -29,12 +29,12 @@ function robodolg_mcm.reset_pool() end
 function robodolg_camera.update_camera_matrix() end
 
 reset_shapes = system("reset_shapes")
-   :runs_before(goldenorb_before_modify_state)
+   :runs_before(gorb_before_modify_state)
    :via(robodolg_shapes.reset)
    :during(ACTOR_ON_UPDATE)
 
 update_camera_matrix = system("update_camera_matrix")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads({"matrices", "camera"})
    :via(function(state)
       robodolg_camera.camera_matrix = state.matrices.camera

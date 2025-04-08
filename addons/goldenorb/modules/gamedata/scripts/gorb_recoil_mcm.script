@@ -7,7 +7,7 @@
 -- Imports
 
 --- Goldenorb
-local tree = goldenorb_mcm.tree
+local tree = gorb_mcm.tree
 
 --- Schedule
 local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
@@ -15,25 +15,25 @@ local ACTOR_ON_WEAPON_FIRED = cl_schedule.ACTOR_ON_WEAPON_FIRED
 local LEVEL_CALL = cl_schedule.LEVEL_CALL
 
 --- Main
-local goldenorb_before_build_state = goldenorb_main.goldenorb_before_build_state
-local goldenorb_after_build_state = goldenorb_main.goldenorb_after_build_state
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
 
-local goldenorb_after_modify_state = goldenorb_main.goldenorb_after_modify_state
+local gorb_after_modify_state = gorb_main.gorb_after_modify_state
 
-local goldenorb_before_apply_state = goldenorb_main.goldenorb_before_apply_state
+local gorb_before_apply_state = gorb_main.gorb_before_apply_state
 
 --- Spring
-local mcm_spring = goldenorb_spring.mcm_spring
+local mcm_spring = gorb_spring.mcm_spring
 
 --- Weapon
-local inject_weapon = goldenorb_weapon.inject_weapon
+local inject_weapon = gorb_weapon.inject_weapon
 
 --- Lens
 local lens = cl_lens.lens
 
 --- Spring
-local spring_1d = goldenorb_spring.spring_1d
-local SP_ANGULAR = goldenorb_spring.SP_ANGULAR
+local spring_1d = gorb_spring.spring_1d
+local SP_ANGULAR = gorb_spring.SP_ANGULAR
 
 --- Table
 local foreach = cl_table.foreach
@@ -230,8 +230,8 @@ consume_weapon = system("consume_weapon")
    :during(LEVEL_CALL)
 
 inject_recoil_spring = system("inject_recoil_spring")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :without({"springs", "recoil"})
    :writes({"springs", "recoil"})
    :via(function()
@@ -249,8 +249,8 @@ inject_recoil_spring = system("inject_recoil_spring")
 
 --- Inject the recoil matrix into the state
 inject_recoil_matrix = system("inject_recoil_matrix")
-   :runs_after(goldenorb_before_build_state)
-   :runs_before(goldenorb_after_build_state)
+   :runs_after(gorb_before_build_state)
+   :runs_before(gorb_after_build_state)
    :without({"matrices", "recoil"})
    :writes({"matrices", "recoil"})
    :via(function()
@@ -395,8 +395,8 @@ recoil_weapon = system("recoil_weapon")
 
 --- Integrate recoil forces
 integrate_recoil = system("integrate_recoil")
-   :runs_after(goldenorb_after_modify_state)
-   :runs_before(goldenorb_before_apply_state)
+   :runs_after(gorb_after_modify_state)
+   :runs_before(gorb_before_apply_state)
    :reads(
       {"springs", "recoil", "actor"},
       {"springs", "recoil", "camera"},
@@ -453,8 +453,8 @@ integrate_recoil = system("integrate_recoil")
 
 --- Apply recoil forces to the actor matrix
 apply_actor_recoil = system("apply_actor_recoil")
-   :runs_after(goldenorb_after_modify_state)
-   :runs_before(goldenorb_before_apply_state)
+   :runs_after(gorb_after_modify_state)
+   :runs_before(gorb_before_apply_state)
    :reads(
       {"matrices", "recoil", "actor"},
       {"matrices", "actor"}
@@ -476,8 +476,8 @@ apply_actor_recoil = system("apply_actor_recoil")
 
 --- Apply recoil forces to the camera matrix
 apply_camera_recoil = system("apply_camera_recoil")
-   :runs_after(goldenorb_after_modify_state)
-   :runs_before(goldenorb_before_apply_state)
+   :runs_after(gorb_after_modify_state)
+   :runs_before(gorb_before_apply_state)
    :reads(
       {"matrices", "recoil", "camera"},
       {"matrices", "camera"}
@@ -499,8 +499,8 @@ apply_camera_recoil = system("apply_camera_recoil")
 
 --- Apply recoil forces to the HUD matrix
 apply_hud_recoil = system("apply_hud_recoil")
-   :runs_after(goldenorb_after_modify_state)
-   :runs_before(goldenorb_before_apply_state)
+   :runs_after(gorb_after_modify_state)
+   :runs_before(gorb_before_apply_state)
    :reads(
       {"matrices", "recoil", "hud"},
       {"matrices", "hud"}

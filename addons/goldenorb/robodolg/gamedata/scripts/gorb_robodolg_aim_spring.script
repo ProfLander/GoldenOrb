@@ -14,10 +14,10 @@ local TAU = cl_math.TAU
 local parse_vector = cl_string.parse_vector
 
 --- Main
-local goldenorb_after_apply_state = goldenorb_main.goldenorb_after_apply_state
+local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
 --- RoboDolg
-local tree = goldenorb_robodolg_mcm.tree
+local tree = gorb_robodolg_mcm.tree
 
 --- Schedule
 local system = cl_schedule.system
@@ -49,7 +49,7 @@ local should_draw = page:settings(
 -- Implementation
 
 draw = system("draw")
-   :runs_after(goldenorb_after_apply_state)
+   :runs_after(gorb_after_apply_state)
    :reads("spring_aim", {"robodolg_cache", "camera"})
    :when(function()
       return should_draw:get()

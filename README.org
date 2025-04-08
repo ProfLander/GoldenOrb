@@ -262,31 +262,57 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Incorrect behaviour after +-180 degrees of rotation
   - Currently measuring angles in world space
     - Need to measure in camera space instead
-
-
-*** To Do
-**** Project
-- [ ] Formalize module structure
+- [X] Formalize module structure
   - Should ideally be separable into sub-mods
     - Core
     - Free Aim
     - Offset Aim
     - Bodycam
     - etc.
-- [ ] Move reusable code into lander-math, rename to common-lander
+- [X] Move reusable code into lander-math, rename to common-lander
   - Set up as a submodule alongside MCM Builder Ex
     - Need to bug Igi to put MCM Builder on GitHub so it can be a submodule without requiring an awkward rehost
-- [ ] Split Parallax Reflex Sights / 3DSS patches out into separate submodules
-**** Core
-- [ ] Inject time into state
-  - Currently used by HUD Offset Rotation
-- [ ] fcolor usage pass
-  - No need to use vector for colors
-- [ ] Doc comment pass
-- [ ] Address MCM Builder / Lander Math symlinks
+- [X] Split Parallax Reflex Sights / 3DSS patches out into separate submodules
+- [X] Rewrite schedule around structural newtype-based algorithms
+- [X] Address MCM Builder / Lander Math symlinks
   - Not ideal for people cloning the repo
   - MCM Builder Ex is needed too
     - Currently loaded as a separate mod
+  - *Note:* Dependencies were split into submodules
+- [X] Assert that schedule rules only mention registered calls
+- [X] Assert that no returned values are unmentioned
+  - i.e. ~return { foo = true }~ should be an error if ~foo~ has not been specified as a write or maybe-write
+- [X] Investigate nil checking for before / after, schedules
+  - Currently seem to be running into cases where the whole thing will fail silently due to a script syntax error
+- [X] Replace key / path system with lenses
+  - A lens is a component
+  - Provides a unified composable interface
+  - Nicer OO semantic for sharing
+  - Will likely need prisms for dealing with non-present data
+*** To Do
+**** Project
+- [ ] Integrate new scheduler module with main codebase
+- [ ] Split scheduler dependencies out into submodules of ~common-lander~
+- [ ] Formalize use of ~__index~ and ~__newindex~ and ~__metatable~ for wrapper types
+  - Currently using the basic offload-to-table behaviour in most cases
+    - Results in a lot of manual unwrapping
+  - Can use ~__newindex~ to prevent writes to keys
+  - Should be able to replace ~newproxy~ hackery with ~__newindex~
+  - Should be able to use ~__metatable~ to redirect past ~Named~ for typing purposes
+- [ ] Formalize newtype abstraction
+  - Should be able to create a basic template newtype that points all methods to a given interior value, which is given as a higher-order constructor param
+- [ ] Factor out ~goldenorb_joint~
+  - Only exists as a dependency for the non-working offset aim code now ~goldenorb_recoil~ exists as an example of spring usage
+- [ ] Setup automated releases via GitHub Actions
+  - Necessary to resolve submodules, as the zip download omits them
+**** Core
+- [ ] Inject time into state
+  - Currently used by ~HUD Offset Rotation~
+- [ ] ~fcolor~ usage pass
+  - No need to use ~vector~ for colors
+- [ ] ~fcolor~ / ~vector~ / ~matrix~ validation machinery
+  - Need validity assertions at every point where native math types are passed back to the engine, otherwise busyhands can occur
+- [ ] Doc comment pass
 - [ ] Tie module state to character state
   - i.e. Being able to have autoaim while unscoped, detached while scoped, different behaviour based on player state, any and all combinations of the above
   - Ergo, will need a condlist interface since the problem space is way too big for MCM
@@ -296,17 +322,6 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
     - i.e. Hand the object a set of callbacks for tap / hold / double-tap / etc and have it handle the rest transparently
       - Likely intractable if the locality of schedule state is to be preserved
 - [ ] Investigate script namespacing for anomaly-definitions plugin
-**** Schedule
-- [ ] Assert that schedule rules only mention registered calls
-- [ ] Assert that no returned values are unmentioned
-  - i.e. ~return { foo = true }~ should be an error if ~foo~ has not been specified as a write or maybe-write
-- [ ] Investigate nil checking for before / after, schedules
-  - Currently seem to be running into cases where the whole thing will fail silently due to a script syntax error
-- [ ] Replace key / path system with lenses
-  - A lens is a component
-  - Provides a unified composable interface
-  - Nicer OO semantic for sharing
-  - Will likely need prisms for dealing with non-present data
 **** Matrix
 - [ ] Formalize matrix composition
   - Can define before / after brackets in matrices module, position them inside the appropriate main phase
@@ -319,34 +334,6 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Need second-order velocity springs
     - Will need to pick out an appropriate integrator
   - Third-order acceleration springs?
-**** Actor
-- [ ] Investigate position control via ~set_desired_position~
-  - May allow for introducing new moves
-    - Slide
-      - Crouch input while running
-        - Remain crouched, preserve run velocity for a short time, apply velocity-based camera effects
-    - Tumble roll
-      - Can make this dynamic
-        - Trigger via button or by forcefully aiming beyond the pitch limit
-        - Derive linear motion from angular motion
-        - Dusk-style airborne detached aim
-        - Potential for uncontrollable downhill tumbles if done on a steep incline
-        - Potential for mitigating damage from mid-length falls by holding crouch on hard landing
-        - Potential as a response to particularly strong attacks
-          - i.e. Knockdown
-    - Feint
-      - Short lateral dodge
-      - Crouch > move > uncrouch
-      - Can trigger via crouch > direction plink a-la RE6
-    - Prone dive
-      - Can trigger via jump input during feint
-      - Apply sprint speed for horizontal dive
-      - Finish on ground
-    - Dynamic prone state
-      - Ability to lie on front / back / side, rotate between
-        - Apply linear velocity based on angular motion
-    - Mantle?
-      - Would be very nice to have a fast way to deal with chest-high walls without a tightly-timed jump
 **** Camera
 - [ ] Account for crouch state
 - [ ] Account for prone state
@@ -403,7 +390,34 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
     - i.e. Ability to use the sight while walking
     - Can tie to an extra keybind or somesuch, use aimed recoil values
       - Still subject to hip-fire accuracy penalty
-
+**** Actor
+- [ ] Investigate position control via ~set_desired_position~
+  - May allow for introducing new moves
+    - Slide
+      - Crouch input while running
+        - Remain crouched, preserve run velocity for a short time, apply velocity-based camera effects
+    - Tumble roll
+      - Can make this dynamic
+        - Trigger via button or by forcefully aiming beyond the pitch limit
+        - Derive linear motion from angular motion
+        - Dusk-style airborne detached aim
+        - Potential for uncontrollable downhill tumbles if done on a steep incline
+        - Potential for mitigating damage from mid-length falls by holding crouch on hard landing
+        - Potential as a response to particularly strong attacks
+          - i.e. Knockdown
+    - Feint
+      - Short lateral dodge
+      - Crouch > move > uncrouch
+      - Can trigger via crouch > direction plink a-la RE6
+    - Prone dive
+      - Can trigger via jump input during feint
+      - Apply sprint speed for horizontal dive
+      - Finish on ground
+    - Dynamic prone state
+      - Ability to lie on front / back / side, rotate between
+        - Apply linear velocity based on angular motion
+    - Mantle?
+      - Would be very nice to have a fast way to deal with chest-high walls without a tightly-timed jump
 **** Weapon
 - [ ] Goldeneye-style auto-aim
   - Need to search for visible actors, pick closest / most relevant

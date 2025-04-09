@@ -1,0 +1,18 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: Springs Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+--- Schedule
+local Lens = _cl_schedule.Lens
+local Prism = _cl_schedule.Prism
+local is_nil = _cl_schedule.is_nil
+local is_table = _cl_schedule.is_table
+
+-- Implementation
+
+C_SPRINGS = Lens.where("springs", is_table)
+C_NOT_SPRINGS = Prism.where("springs", is_nil, is_table)

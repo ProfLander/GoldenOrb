@@ -7,28 +7,26 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
+local on_level_call_start = _cl_schedule.on_level_call_start
+local on_level_call_finish = _cl_schedule.on_level_call_finish
 
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
--- Constants
-
-C_MATRICES = "matrices"
+--- Matrices Components
+local C_MATRICES = gorb_matrices_comps.C_MATRICES
+local C_NOT_MATRICES = gorb_matrices_comps.C_NOT_MATRICES
 
 -- Implementation
 
 --- Inject the matrix container into the state
-inject_matrices = system("inject_matrices")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
-   :without(C_MATRICES)
+inject_matrices = System.new("inject_matrices")
+   :reads(C_NOT_MATRICES)
    :writes(C_MATRICES)
    :via(function()
-      return {
-         [C_MATRICES] = {}
-      }
+      printf("Inject matrices")
+      return {}
    end)
-   :during(LEVEL_CALL)
+
+on_level_call:concat(
+    on_level_call_start .. inject_matrices .. on_level_call_finish
+)

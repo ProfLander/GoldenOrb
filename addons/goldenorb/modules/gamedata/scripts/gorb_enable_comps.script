@@ -1,0 +1,14 @@
+----------------------------------------------------------------------------
+-- RoboDolg: Enable Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+local Lens = _cl_schedule.Lens
+local is_table = _cl_schedule.is_table
+
+-- Implementation
+
+C_ENABLE = Lens.where("enable", is_table)

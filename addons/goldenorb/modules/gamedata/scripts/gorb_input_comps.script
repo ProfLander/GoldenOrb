@@ -1,0 +1,27 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: Input Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+--- Schedule
+local Lens = _cl_schedule.Lens
+local Prism = _cl_schedule.Lens
+local is_nil = _cl_schedule.is_nil
+local is_boolean = _cl_schedule.is_boolean
+local is_number = _cl_schedule.is_number
+local is_table = _cl_schedule.is_table
+
+-- Implementation
+
+C_GIMBAL_TARGET = Lens.where("gimbal_target", is_number)
+C_MAYBE_GIMBAL_TARGET = Prism.where("gimbal_target", is_number)
+C_NOT_GIMBAL_TARGET = Prism.where("gimbal_target", is_nil, is_number)
+
+C_KEYBOARD = Lens.where("keyboard", is_table)
+C_KEY = Lens.where("key", is_number)
+
+C_MOUSE = Lens.where("mouse", is_table)
+C_OVERRIDE = Lens.where("override", is_boolean)

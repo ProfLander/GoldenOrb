@@ -7,7 +7,8 @@
 -- Imports
 
 --- Schedule
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
+local actor_on_update = _cl_schedule.actor_on_update
+local actor_on_update_start = _cl_schedule.actor_on_update_start
 
 --- Main
 local gorb_before_modify_state = gorb_main.gorb_before_modify_state
@@ -15,11 +16,21 @@ local gorb_before_modify_state = gorb_main.gorb_before_modify_state
 --- Weapon
 local get_hud_number = gorb_weapon.get_hud_number
 
+--- HUD Components
+local C_HUD = gorb_hud_comps.C_HUD
+local C_AIM_HUD_OFFSET_ROT = gorb_hud_comps.C_AIM_HUD_OFFSET_ROT
+
+--- Weapon Components
+local C_WEAPON = gorb_weapon_comps.C_WEAPON
+
+--- Matrices Components
+local C_MATRICES = gorb_matrices_comps.C_MATRICES
+
 --- Math
 local hpb_to_direction = cl_math.hpb_to_direction
 
 --- Schedule
-local system = cl_schedule.system
+local System = _cl_schedule.System
 
 --- Logging
 local log = cl_logging.logger(
@@ -78,12 +89,15 @@ function get_hands_aim_point()
 end
 
 --- Counteract ADS rotation offset to keep the weapon centered
-apply_hud_offset_rot = system("apply_hud_offset_rot")
-   :runs_before(gorb_before_modify_state)
-   :reads("wpn", {"hud", "aim_hud_offset_rot"}, {"matrices", "hud"})
-   :writes({"matrices", "hud"})
-   :via(function(state)
-      local zoom_duration = get_hud_number(state.wpn, "zoom_rotate_time")
+apply_hud_offset_rot = System.new("apply_hud_offset_rot")
+   :reads(
+      C_WEAPON,
+      C_HUD .. C_AIM_HUD_OFFSET_ROT,
+      C_MATRICES .. C_HUD
+   )
+   :writes(C_MATRICES .. C_HUD)
+   :via(function(wpn, aim_hud_offset_rot, mat_hud)
+      local zoom_duration = get_hud_number(wpn, "zoom_rotate_time")
       if zoom_duration == nil or
          zoom_duration == 0
       then
@@ -93,9 +107,9 @@ apply_hud_offset_rot = system("apply_hud_offset_rot")
 
       -- Apply HUD offset rotation based on zoom state
       local rot_ofs = vector():set(
-         state.hud.aim_hud_offset_rot.y,
-         state.hud.aim_hud_offset_rot.x,
-         state.hud.aim_hud_offset_rot.z
+         aim_hud_offset_rot.y,
+         aim_hud_offset_rot.x,
+         aim_hud_offset_rot.z
       )
 
       local dt = (device().time_delta / 1000) / zoom_duration
@@ -110,13 +124,14 @@ apply_hud_offset_rot = system("apply_hud_offset_rot")
       log:debug("  zoom_fac: %s", zoom_fac)
 
       -- Done
-      return {
-         matrices = {
-            hud = matrix():mul(
-               state.matrices.hud,
-               matrix():setHPB(rot_ofs:mul(-(1 - zoom_fac)))
-            )
-         }
-      }
+      return matrix():mul(
+         mat_hud,
+         matrix():setHPB(rot_ofs:mul(-(1 - zoom_fac)))
+      )
    end)
-   :during(ACTOR_ON_UPDATE)
+
+actor_on_update:concat(
+   actor_on_update_start ..
+   apply_hud_offset_rot ..
+   gorb_before_modify_state
+)

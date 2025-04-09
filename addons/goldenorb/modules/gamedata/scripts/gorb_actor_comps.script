@@ -1,0 +1,17 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: Actor Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+local Lens = _cl_schedule.Lens
+local Prism = _cl_schedule.Prism
+local is_nil = _cl_schedule.is_nil
+local is_non_nil = _cl_schedule.is_non_nil
+
+-- Constants
+
+C_ACTOR = Lens.where("actor", is_non_nil)
+C_NOT_ACTOR = Prism.where("actor", is_nil, is_non_nil)

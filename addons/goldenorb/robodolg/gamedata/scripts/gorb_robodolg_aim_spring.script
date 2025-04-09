@@ -16,12 +16,26 @@ local parse_vector = cl_string.parse_vector
 --- Main
 local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
+--- Enable Components
+local C_ENABLE = gorb_enable_comps.C_ENABLE
+
+--- Cache Components
+local C_ROBODOLG = gorb_robodolg_cache_comps.C_ROBODOLG
+local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
+
+--- Camera Components
+local C_CAMERA = gorb_camera_comps.C_CAMERA
+
 --- RoboDolg
 local tree = gorb_robodolg_mcm.tree
 
 --- Schedule
-local system = cl_schedule.system
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
+local System = _cl_schedule.System
+local Lens = _cl_schedule.Lens
+local actor_on_update = _cl_schedule.actor_on_update
+local actor_on_update_finish = _cl_schedule.actor_on_update_finish
+local is_non_nil = _cl_schedule.is_non_nil
+local is_boolean = _cl_schedule.is_boolean
 
 --- Shapes
 local draw_line = robodolg_shapes.draw_line
@@ -48,14 +62,23 @@ local should_draw = page:settings(
 
 -- Implementation
 
-draw = system("draw")
-   :runs_after(gorb_after_apply_state)
-   :reads("spring_aim", {"robodolg_cache", "camera"})
-   :when(function()
-      return should_draw:get()
+C_SPRING_AIM = Lens.where("spring_aim", is_non_nil)
+C_DRAW_AIM_SPRING = Lens.where("draw_aim_spring", is_boolean)
+
+inject_should_draw_aim_spring = System.new("inject_should_draw_aim_spring")
+   :writes(C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_SPRING)
+   :via(function()
+      return should_draw:get() or nil
    end)
-   :via(function(state)
-      local length = parse_vector(state.spring_aim.length:get()):mul(DEG2RAD)
+
+draw_aim_spring = System.new("draw_aim_spring")
+   :reads(
+      C_SPRING_AIM,
+      C_ROBODOLG_CACHE .. C_CAMERA,
+      C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_SPRING
+   )
+   :via(function(spring_aim, camera)
+      local length = parse_vector(spring_aim.length:get()):mul(DEG2RAD)
       log("length: %s", length)
 
       --[[
@@ -91,7 +114,7 @@ draw = system("draw")
       end
       --]]
 
-      local cam_aim = state.robodolg_cache.camera.aim
+      local cam_aim = camera.aim
       local acc = nil
       for i=1,32 do
          local t = i / 31
@@ -111,4 +134,10 @@ draw = system("draw")
          acc = vector():set(v)
       end
    end)
-   :during(ACTOR_ON_UPDATE)
+
+actor_on_update:concat(
+   gorb_after_apply_state ..
+   inject_should_draw_aim_spring ..
+   draw_aim_spring ..
+   actor_on_update_finish
+)

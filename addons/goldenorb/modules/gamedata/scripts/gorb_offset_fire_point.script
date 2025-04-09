@@ -7,15 +7,21 @@
 -- Imports
 
 --- Schedule
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
+local on_level_call_finish = _cl_schedule.on_level_call_finish
+
+--- HUD
+local C_HUD = gorb_hud_comps.C_HUD
+local C_FIRE_POINT = gorb_hud_comps.C_FIRE_POINT
+local C_FIRE_POINT2 = gorb_hud_comps.C_FIRE_POINT2
+
+--- Main
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 --- Weapon
-local inject_weapon_hud = gorb_weapon.inject_weapon_hud
-
---- Schedule
-local system = cl_schedule.system
-local I_READ = cl_schedule.I_READ
-local O_WRITE = cl_schedule.O_WRITE
+local inject_hud = gorb_weapon.inject_hud
 
 --- Math
 local EPSILON = cl_math.EPSILON
@@ -33,26 +39,23 @@ local OFFSET = vector():set(0, 0, EPSILON)
 -- Implementation
 
 --- Offset fire point slightly to prevent bullet spawn failure
-offset_fire_point = system("offset_fire_point")
-   :runs_after(inject_weapon_hud)
-   :inputs({
-      hud = {
-         fire_point = I_READ,
-         fire_point2 = I_READ,
-      }
-   })
-   :outputs({
-      hud = {
-         fire_point = O_WRITE,
-         fire_point2 = O_WRITE,
-      }
-   })
-   :via(function(state)
-      return {
-         hud = {
-            fire_point = vector():set(state.hud.fire_point):add(OFFSET),
-            fire_point2 = vector():set(state.hud.fire_point2):add(OFFSET),
-         }
-      }
+offset_fire_point = System.new("offset_fire_point")
+   :reads(
+      C_HUD .. C_FIRE_POINT,
+      C_HUD .. C_FIRE_POINT2
+   )
+   :writes(
+      C_HUD .. C_FIRE_POINT,
+      C_HUD .. C_FIRE_POINT2
+   )
+   :via(function(fire_point, fire_point2)
+      return vector():set(fire_point):add(OFFSET),
+             vector():set(fire_point2):add(OFFSET)
    end)
-   :during(LEVEL_CALL)
+
+on_level_call(
+   gorb_before_build_state ..
+   inject_hud ..
+   offset_fire_point ..
+   gorb_after_build_state
+)

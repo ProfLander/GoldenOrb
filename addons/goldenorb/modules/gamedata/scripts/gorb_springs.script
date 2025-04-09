@@ -7,28 +7,29 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
--- Constants
-
-C_SPRINGS = "springs"
+--- Springs Components
+local C_SPRINGS = gorb_springs_comps.C_SPRINGS
+local C_NOT_SPRINGS = gorb_springs_comps.C_NOT_SPRINGS
 
 -- Implementation
 
 --- Inject the matrix container into the state
-inject_springs = system("inject_springs")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
-   :without(C_SPRINGS)
+inject_springs = System.new("inject_springs")
+   :reads(C_NOT_SPRINGS)
    :writes(C_SPRINGS)
    :via(function()
-      return {
-         [C_SPRINGS] = {}
-      }
+      return {}
    end)
-   :during(LEVEL_CALL)
+
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_springs ..
+   gorb_after_build_state
+)

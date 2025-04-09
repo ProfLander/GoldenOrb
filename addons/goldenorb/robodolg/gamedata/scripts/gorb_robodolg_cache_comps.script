@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------
+-- RoboDolg: Cache Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+local Lens = _cl_schedule.Lens
+local is_table = _cl_schedule.is_table
+local is_vector = _cl_schedule.is_vector
+
+C_ROBODOLG = Lens.where("robodolg", is_table)
+C_ROBODOLG_CACHE = Lens.where("robodolg_cache", is_table)
+
+C_HANDS = Lens.where("hands", is_table)
+C_POS = Lens.where("pos", is_vector)
+C_ROT = Lens.where("rot", is_vector)
+C_AIM = Lens.where("aim", is_vector)
+C_FIRE_POS = Lens.where("fire_pos", is_vector)

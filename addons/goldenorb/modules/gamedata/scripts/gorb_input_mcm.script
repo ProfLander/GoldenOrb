@@ -7,30 +7,42 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
-local ON_BEFORE_MOUSE_MOVE = cl_schedule.ON_BEFORE_MOUSE_MOVE
-local ON_KEY_PRESS = cl_schedule.ON_KEY_PRESS
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
+local on_before_mouse_move = _cl_schedule.on_before_mouse_move
+local on_before_mouse_move_start = _cl_schedule.on_before_mouse_move_start
+local on_before_mouse_move_finish = _cl_schedule.on_before_mouse_move_finish
+
+local on_key_press = _cl_schedule.on_key_press
+local on_key_press_start = _cl_schedule.on_key_press_start
+local on_key_press_finish = _cl_schedule.on_key_press_finish
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
+--- Input Components
+local C_GIMBAL_TARGET = gorb_input_comps.C_GIMBAL_TARGET
+local C_MAYBE_GIMBAL_TARGET = gorb_input_comps.C_MAYBE_GIMBAL_TARGET
+local C_NOT_GIMBAL_TARGET = gorb_input_comps.C_NOT_GIMBAL_TARGET
+
+local C_KEYBOARD = gorb_input_comps.C_KEYBOARD
+local C_KEY = gorb_input_comps.C_KEY
+
+local C_MOUSE = gorb_input_comps.C_MOUSE
+local C_OVERRIDE = gorb_input_comps.C_OVERRIDE
+
 --- Gimbal
-local C_GIMBALS = gorb_gimbals.C_GIMBALS
+local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
 
 --- Actor
-local C_ACTOR = gorb_actor.C_ACTOR
+local C_ACTOR = gorb_actor_comps.C_ACTOR
 
 --- Camera
-local C_CAMERA = gorb_camera_mcm.C_CAMERA
+local C_CAMERA = gorb_camera_comps.C_CAMERA
 
---- Weapon
-local C_HUD = gorb_weapon.C_HUD
-
---- Aim
-local aim_type = gorb_aim_mcm.aim_type
-local AIM_FREE = gorb_aim_mcm.AIM_FREE
+--- HUD Components
+local C_HUD = gorb_hud_comps.C_HUD
 
 --- GoldenOrb
 local tree = gorb_mcm.tree
@@ -55,31 +67,32 @@ local cycle_gimbal = page:settings(
 
 -- Implementation
 
-C_GIMBAL_TARGET = "gimbal_target"
-
 GT_ACTOR = 0
 GT_CAMERA = 1
 GT_HUD = 2
 GT_MAX = 3
 
-inject_gimbal_target = system("inject_gimbal_target")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
-   :without(C_GIMBAL_TARGET)
+inject_gimbal_target = System.new("inject_gimbal_target")
+   :reads(C_NOT_GIMBAL_TARGET)
    :writes(C_GIMBAL_TARGET)
    :via(function()
-      return {
-         [C_GIMBAL_TARGET] = GT_ACTOR
-      }
+      return GT_ACTOR
    end)
-   :during(LEVEL_CALL)
 
-cycle_gimbal_target = system("cycle_gimbal_target")
-   :reads(C_GIMBAL_TARGET, {"keyboard", "key"})
-   :maybe_writes(C_GIMBAL_TARGET)
-   :via(function(state)
-      local key = state.keyboard.key
-      log("  key: %s", state.keyboard.key)
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_gimbal_target ..
+   gorb_after_build_state
+)
+
+cycle_gimbal_target = System.new("cycle_gimbal_target")
+   :reads(
+      C_GIMBAL_TARGET,
+      C_KEYBOARD .. C_KEY
+   )
+   :writes(C_MAYBE_GIMBAL_TARGET)
+   :via(function(target, key)
+      log("  key: %s", key)
 
       local bind = cycle_gimbal:get()
       log("  bind: %s", bind)
@@ -87,7 +100,6 @@ cycle_gimbal_target = system("cycle_gimbal_target")
          return
       end
 
-      local target = state[C_GIMBAL_TARGET]
       target = math.fmod(target + 1, GT_MAX)
       log("  target: %s", target)
 
@@ -104,47 +116,63 @@ cycle_gimbal_target = system("cycle_gimbal_target")
          1000
       )
 
-      return {
-         [C_GIMBAL_TARGET] = target
-      }
+      return target
    end)
-   :during(ON_KEY_PRESS)
 
-handle_mouse = system("handle_mouse")
-   :reads("mouse", C_GIMBALS, C_GIMBAL_TARGET)
-   :writes(C_GIMBALS, {"mouse", "override"})
-   :when(function()
-      return aim_type:get() == AIM_FREE
-   end)
-   :via(function(state)
-      local target = state[C_GIMBAL_TARGET]
+on_key_press:concat(
+   on_key_press_start ..
+   cycle_gimbal_target ..
+   on_key_press_finish
+)
 
-      local gimbals = state[C_GIMBALS]
-      local mouse_sens = get_console():get_float("mouse_sens")
-      local disp = vector():set(-state.mouse.x, -state.mouse.y, 0)
-         :mul(mouse_sens)
-         :mul(0.02)
+handle_mouse = System.new("handle_mouse")
+   :reads(
+      C_MOUSE,
+      C_GIMBALS .. C_ACTOR,
+      C_GIMBALS .. C_CAMERA,
+      C_GIMBALS .. C_HUD,
+      C_GIMBAL_TARGET
+   )
+   :writes(
+      C_GIMBALS .. C_ACTOR,
+      C_GIMBALS .. C_CAMERA,
+      C_GIMBALS .. C_HUD,
+      C_MOUSE .. C_OVERRIDE
+   )
+   :via(
+      function(
+         mouse,
+         gimbal_actor,
+         gimbal_camera,
+         gimbal_hud,
+         target
+      )
+         local mouse_sens = get_console():get_float("mouse_sens")
+         local disp = vector():set(-mouse.x, -mouse.y, 0)
+            :mul(mouse_sens)
+            :mul(0.02)
 
-      if target == GT_ACTOR then
-         gimbals[C_ACTOR] = vector():add(
-            state[C_GIMBALS][C_ACTOR],
-            vector():set(disp.x, 0, 0)
-         )
-         gimbals[C_CAMERA] = vector():add(
-            state[C_GIMBALS][C_CAMERA],
-            vector():set(0, disp.y, disp.z)
-         )
-      elseif target == GT_CAMERA then
-         gimbals[C_CAMERA] = vector():add(state[C_GIMBALS][C_CAMERA], disp)
-      elseif target == GT_HUD then
-         gimbals[C_HUD] = vector():add(state[C_GIMBALS][C_HUD], disp)
+         if target == GT_ACTOR then
+            gimbal_actor = vector():add(
+               state[C_GIMBALS][C_ACTOR],
+               vector():set(disp.x, 0, 0)
+            )
+            gimbal_camera = vector():add(
+               gimbal_camera,
+               vector():set(0, disp.y, disp.z)
+            )
+         elseif target == GT_CAMERA then
+            gimbal_camera = vector():add(gimbal_camera, disp)
+         elseif target == GT_HUD then
+            gimbal_hud = vector():add(gimbal_hud, disp)
+         end
+
+         return gimbal_actor, gimbal_camera, gimbal_hud, true
       end
+   )
 
-      return {
-         [C_GIMBALS] = gimbals,
-         mouse = {
-            override = true
-         }
-      }
-   end)
-   :during(ON_BEFORE_MOUSE_MOVE)
+on_before_mouse_move:concat(
+   on_before_mouse_move_start ..
+   handle_mouse ..
+   on_before_mouse_move_finish
+)

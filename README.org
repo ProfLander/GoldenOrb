@@ -299,6 +299,8 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Can use ~__newindex~ to prevent writes to keys
   - Should be able to replace ~newproxy~ hackery with ~__newindex~
   - Should be able to use ~__metatable~ to redirect past ~Named~ for typing purposes
+- [ ] Busyhands avoidance pass
+  - Certain systems store references to objects without cleaning them up; they get overwritten with a fresh get before use, but keeping them around between invocations is not desirable
 - [ ] Formalize newtype abstraction
   - Should be able to create a basic template newtype that points all methods to a given interior value, which is given as a higher-order constructor param
 - [ ] Factor out ~goldenorb_joint~

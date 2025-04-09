@@ -1,0 +1,29 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: HUD Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+local Lens = _cl_schedule.Lens
+local Prism = _cl_schedule.Prism
+local is_nil = _cl_schedule.is_nil
+local is_number = _cl_schedule.is_nil
+local is_vector = _cl_schedule.is_vector
+local is_table = _cl_schedule.is_table
+
+-- Implementation
+
+C_HUD = Lens.where("hud", is_table)
+C_NOT_HUD = Prism.where("hud", is_nil, is_table)
+
+C_HANDS_POSITION = Lens.where("hands_position", is_vector)
+C_HANDS_ORIENTATION = Lens.where("hands_orientation", is_vector)
+C_AIM_HUD_OFFSET_POS = Lens.where("aim_hud_offset_pos", is_vector)
+C_AIM_HUD_OFFSET_ROT = Lens.where("aim_hud_offset_rot", is_vector)
+C_SCOPE_ZOOM_FACTOR = Lens.where("scope_zoom_factor", is_number)
+C_GL_ZOOM_FACTOR = Lens.where("gl_zoom_factor", is_number)
+C_SCOPE_ZOOM_FACTOR_ALT = Lens.where("scope_zoom_factor_alt", is_number)
+C_FIRE_POINT = Lens.where("fire_point", is_vector)
+C_FIRE_POINT2 = Lens.where("fire_point2", is_vector)

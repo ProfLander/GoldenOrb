@@ -1,0 +1,16 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: Gimbals Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+local Lens = _cl_schedule.Lens
+local is_table = _cl_schedule.is_table
+local is_nil = _cl_schedule.is_nil
+
+-- Implementation
+
+C_GIMBALS = Lens.where("gimbals", is_table)
+C_NOT_GIMBALS = Lens.where("gimbals", is_nil, is_table)

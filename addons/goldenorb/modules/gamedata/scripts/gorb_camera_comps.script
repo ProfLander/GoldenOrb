@@ -1,0 +1,23 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: Camera Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+local Lens = _cl_schedule.Lens
+local Prism = _cl_schedule.Prism
+local is_nil = _cl_schedule.is_nil
+local is_non_nil = _cl_schedule.is_non_nil
+local is_boolean = _cl_schedule.is_boolean
+
+-- Implementation
+
+C_CAMERA = Lens.where("camera", is_non_nil)
+C_NOT_CAMERA = Prism.where("camera", is_nil, is_non_nil)
+
+C_CAM_FLAG = Lens.where("_cam_custom_position_direction", is_boolean)
+C_NOT_CAM_FLAG = Prism.where(
+    "_cam_custom_position_direction", is_nil, is_boolean
+)

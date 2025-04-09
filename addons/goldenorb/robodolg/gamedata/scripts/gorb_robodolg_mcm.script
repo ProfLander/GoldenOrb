@@ -11,12 +11,20 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
+local System = _cl_schedule.System
+local actor_on_update = _cl_schedule.actor_on_update
+local actor_on_update_start = _cl_schedule.actor_on_update_start
+local actor_on_update_finish = _cl_schedule.actor_on_update_finish
 
 --- Main
 local gorb_before_modify_state = gorb_main.gorb_before_modify_state
 local gorb_after_apply_state = gorb_main.gorb_after_apply_state
+
+--- Matrices Components
+local C_MATRICES = gorb_matrices_comps.C_MATRICES
+
+--- Camera Components
+local C_CAMERA = gorb_camera_comps.C_CAMERA
 
 --- Robodolg
 local mcm_tree = robodolg_mcm.tree
@@ -28,15 +36,20 @@ tree = mcm_tree:subtrees("goldenorb")
 function robodolg_mcm.reset_pool() end
 function robodolg_camera.update_camera_matrix() end
 
-reset_shapes = system("reset_shapes")
-   :runs_before(gorb_before_modify_state)
+reset_shapes = System.new("reset_shapes")
    :via(robodolg_shapes.reset)
-   :during(ACTOR_ON_UPDATE)
 
-update_camera_matrix = system("update_camera_matrix")
-   :runs_after(gorb_after_apply_state)
-   :reads({"matrices", "camera"})
-   :via(function(state)
-      robodolg_camera.camera_matrix = state.matrices.camera
+update_camera_matrix = System.new("update_camera_matrix")
+   :reads(C_MATRICES .. C_CAMERA)
+   :via(function(mat_cam)
+      robodolg_camera.camera_matrix = mat_cam
    end)
-   :during(ACTOR_ON_UPDATE)
+
+actor_on_update:concat(
+   actor_on_update_start ..
+   reset_shapes ..
+   gorb_before_modify_state ..
+   gorb_after_apply_state ..
+   update_camera_matrix ..
+   actor_on_update_finish
+)

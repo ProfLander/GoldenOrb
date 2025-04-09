@@ -7,30 +7,31 @@
 -- Imports
 
 --- Schedule
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local on_level_call = _cl_schedule.on_level_call
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 --- Schedule
-local system = cl_schedule.system
+local System = _cl_schedule.System
 
--- Constants
-
-C_GIMBALS = "gimbals"
+--- Gimbals Components
+local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
+local C_NOT_GIMBALS = gorb_gimbals_comps.C_NOT_GIMBALS
 
 -- Implementation
 
 --- Inject the gimbal container into the state
-inject_gimbals = system("inject_gimbals")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
-   :without(C_GIMBALS)
+inject_gimbals = System.new("inject_gimbals")
+   :reads(C_NOT_GIMBALS)
    :writes(C_GIMBALS)
    :via(function()
-      return {
-         [C_GIMBALS] = {}
-      }
+      return {}
    end)
-   :during(LEVEL_CALL)
+
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_gimbals ..
+   gorb_after_build_state
+)

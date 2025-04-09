@@ -1,0 +1,23 @@
+----------------------------------------------------------------------------
+-- GoldenOrb: Recoil Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
+
+-- Imports
+
+--- Schedule
+Lens = _cl_schedule.Lens
+Prism = _cl_schedule.Prism
+is_nil = _cl_schedule.is_nil
+is_table = _cl_schedule.is_table
+is_matrix = _cl_schedule.is_matrix
+
+-- Implementation 
+
+C_RECOIL = Lens.where("recoil", is_table)
+C_NOT_RECOIL = Prism.where("recoil", is_nil, is_table)
+
+C_ACTOR = Lens.where("actor", is_matrix)
+C_CAMERA = Lens.where("camera", is_matrix)
+C_HUD = Lens.where("hud", is_matrix)

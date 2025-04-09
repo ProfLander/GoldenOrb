@@ -1,8 +1,27 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
+local on_level_call_start = _cl_schedule.on_level_call_start
+
+--- Matrices Components 
+local C_MATRICES = gorb_matrices_comps.C_MATRICES
+
+--- Actor Components 
+local C_ACTOR = gorb_actor_comps.C_ACTOR
+
+--- Camera Components 
+local C_CAMERA = gorb_camera_comps.C_CAMERA
+
+--- HUD Components 
+local C_HUD = gorb_hud_comps.C_HUD
+
+--- Weapon Components 
+local C_WEAPON = gorb_weapon_comps.C_WEAPON
+
+--- Cache Components 
+local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
 
 --- Main 
 local gorb_before_build_state = gorb_main.gorb_before_build_state
@@ -12,64 +31,64 @@ local get_weapon_aim_point = gorb_weapon.get_weapon_aim_point
 local get_fire_bone_position = gorb_weapon.get_fire_bone_position
 local get_fire_bone_rotation = gorb_weapon.get_fire_bone_rotation
 
-cache = system("cache")
-   :runs_before(gorb_before_build_state)
+robodolg_cache = System.new("robodolg_cache")
    :reads(
-      "actor",
-      "wpn",
-      {"matrices", "actor"},
-      {"matrices", "camera"},
-      {"matrices", "hud"}
+      C_ACTOR,
+      C_WEAPON,
+      C_MATRICES .. C_ACTOR,
+      C_MATRICES .. C_CAMERA,
+      C_MATRICES .. C_HUD
    )
    :writes(
-      {"robodolg_cache", "actor"},
-      {"robodolg_cache", "camera"},
-      {"robodolg_cache", "hands"},
-      {"robodolg_cache", "weapon"}
+      C_ROBODOLG_CACHE .. C_ACTOR,
+      C_ROBODOLG_CACHE .. C_CAMERA,
+      C_ROBODOLG_CACHE .. C_HUD,
+      C_ROBODOLG_CACHE .. C_WEAPON
    )
-   :via(function(state)
-      local actor_pos = state.actor:position()
-      local mat_cam = state.matrices.camera
+   :via(function(actor, weapon, mat_actor, mat_cam, mat_hud)
+      local actor_pos = actor:position()
       local mat_hands = matrix():mul(
-         state.matrices.camera,
-         state.matrices.hud
+         mat_cam,
+         mat_hud
       )
 
-      return {
-         robodolg_cache = {
-            actor = {
-               pos = actor_pos,
-               aim = vector():add(
-                  actor_pos,
-                  vector():mul(
-                     state.matrices.actor.k,
-                     1000
-                  )
-               ),
-               rot = state.matrices.actor:getHPB(),
-            },
-            camera = {
-               pos = mat_cam.c,
-               aim = vector():add(
-                  mat_cam.c,
-                  vector():mul(mat_cam.k, 1000)
-               ),
-               rot = mat_cam:getHPB()
-            },
-            hands = {
-               pos = mat_hands.c,
-               aim = vector():add(
-                  mat_hands.c,
-                  vector():mul(mat_hands.k, 1000)
-               ),
-               rot = mat_hands:getHPB(),
-            },
-            weapon = {
-               aim = get_weapon_aim_point(state.wpn),
-               rot = get_fire_bone_rotation(state.wpn),
-               fire_pos = get_fire_bone_position(state.wpn),
-            }
+      return
+         {
+            pos = actor_pos,
+            aim = vector():add(
+               actor_pos,
+               vector():mul(
+                  mat_actor.k,
+                  1000
+               )
+            ),
+            rot = mat_actor:getHPB(),
          },
-      }
+         {
+            pos = mat_cam.c,
+            aim = vector():add(
+               mat_cam.c,
+               vector():mul(mat_cam.k, 1000)
+            ),
+            rot = mat_cam:getHPB()
+         },
+         {
+            pos = mat_hands.c,
+            aim = vector():add(
+               mat_hands.c,
+               vector():mul(mat_hands.k, 1000)
+            ),
+            rot = mat_hands:getHPB(),
+         },
+         {
+            aim = get_weapon_aim_point(weapon),
+            rot = get_fire_bone_rotation(weapon),
+            fire_pos = get_fire_bone_position(weapon),
+         }
    end)
-   :during(LEVEL_CALL)
+
+on_level_call:concat(
+   on_level_call_start ..
+   robodolg_cache ..
+   gorb_before_build_state
+)

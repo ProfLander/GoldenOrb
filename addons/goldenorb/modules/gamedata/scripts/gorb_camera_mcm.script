@@ -9,31 +9,33 @@
 --- Goldenorb
 local tree = gorb_mcm.tree
 
---- Schedule
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
-
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
-local gorb_before_modify_state = gorb_main.gorb_before_modify_state
-local gorb_after_modify_state = gorb_main.gorb_after_modify_state
-
 local gorb_before_apply_state = gorb_main.gorb_before_apply_state
 local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
---- Gimbals
-local C_GIMBALS = gorb_gimbals.C_GIMBALS
+--- Actor Components
+local C_ACTOR = gorb_actor_comps.C_ACTOR
+
+--- Camera Components
+local C_CAMERA = gorb_camera_comps.C_CAMERA
+local C_NOT_CAMERA = gorb_camera_comps.C_NOT_CAMERA
+local C_CAM_FLAG = gorb_camera_comps.C_CAM_FLAG
+local C_NOT_CAM_FLAG = gorb_camera_comps.C_NOT_CAM_FLAG
+
+--- Gimbals Components
+local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
 
 --- Matrices
-local C_MATRICES = gorb_matrices.C_MATRICES
-
---- Matrices
-local C_ACTOR = gorb_actor.C_ACTOR
+local C_MATRICES = gorb_matrices_comps.C_MATRICES
 
 --- Schedule
-local system = cl_schedule.system
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
+local actor_on_update = _cl_schedule.actor_on_update
+local actor_on_update_start = _cl_schedule.actor_on_update_start
 
 --- Level
 local set_cam_custom_position_direction = level.set_cam_custom_position_direction
@@ -119,108 +121,87 @@ function camera_matrix()
    )
 end
 
-C_CAMERA = "camera"
-C_CAM_FLAG = "_cam_custom_position_direction"
-
 --- Inject the camera gimbal into the state
-inject_camera_gimbal = system("inject_camera_gimbal")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
-   :without({C_GIMBALS, C_CAMERA})
-   :writes({C_GIMBALS, C_CAMERA})
-   :via(function()
-      return {
-         [C_GIMBALS] = {
-            [C_CAMERA] = vector()
-         }
-      }
-   end)
-   :during(LEVEL_CALL)
+inject_camera_gimbal = System.new("inject_camera_gimbal")
+   :reads(C_GIMBALS .. C_NOT_CAMERA)
+   :writes(C_GIMBALS .. C_CAMERA)
+   :via(vector)
+
+on_level_call:concat(
+    gorb_before_build_state .. inject_camera_gimbal .. gorb_after_build_state
+)
 
 --- Derive the camera matrix from the camera gimbal
-derive_camera_matrix = system("derive_camera_matrix")
-   :runs_after(inject_camera_gimbal)
-   :runs_before(gorb_after_build_state)
-   :reads({C_GIMBALS, C_CAMERA})
-   :writes({C_MATRICES, C_CAMERA})
-   :via(function(state)
-      return {
-         [C_MATRICES] = {
-            [C_CAMERA] = matrix():setHPB(state[C_GIMBALS][C_CAMERA])
-         }
-      }
+derive_camera_matrix = System.new("derive_camera_matrix")
+   :reads(C_GIMBALS .. C_CAMERA)
+   :writes(C_MATRICES .. C_CAMERA)
+   :via(function(gimbal_camera)
+      return matrix():setHPB(gimbal_camera)
    end)
-   :during(LEVEL_CALL)
 
-actor_relative_camera = system("actor_relative_camera")
-   :runs_before(gorb_before_apply_state)
-   :reads({C_MATRICES, C_ACTOR}, {C_MATRICES, C_CAMERA})
-   :writes({C_MATRICES, C_CAMERA})
-   :via(function(state)
-      return {
-         [C_MATRICES] = {
-            [C_CAMERA] = matrix():mul(
-               state[C_MATRICES][C_ACTOR],
-               state[C_MATRICES][C_CAMERA]
-            )
-         }
-      }
-   end)
-   :during(ACTOR_ON_UPDATE)
+on_level_call:concat(
+   inject_camera_gimbal .. derive_camera_matrix .. gorb_after_build_state
+)
 
-camera_arm = system("camera_arm")
-   :runs_after(actor_relative_camera)
-   :runs_before(gorb_before_apply_state)
-   :reads({C_MATRICES, C_CAMERA})
-   :writes({C_MATRICES, C_CAMERA})
-   :via(function(state)
-      return {
-         [C_MATRICES] = {
-            [C_CAMERA] = matrix():mul(
-               matrix():identity():translate(0, 1.656, 0),
-               matrix():mul(
-                  state[C_MATRICES][C_CAMERA],
-                  matrix():identity():translate(0, 0, 0)
-               )
-            )
-         }
-      }
+actor_relative_camera = System.new("actor_relative_camera")
+   :reads(
+      C_MATRICES .. C_ACTOR,
+      C_MATRICES .. C_CAMERA
+   )
+   :writes(C_MATRICES .. C_CAMERA)
+   :via(function(mat_actor, mat_camera)
+      return matrix():mul(mat_actor, mat_camera)
    end)
-   :during(ACTOR_ON_UPDATE)
+
+camera_arm = System.new("camera_arm")
+   :reads(C_MATRICES .. C_CAMERA)
+   :writes(C_MATRICES .. C_CAMERA)
+   :via(function(mat_cam)
+      return matrix():mul(
+         matrix():identity():translate(0, 1.656, 0),
+         matrix():mul(
+            mat_cam,
+            matrix():identity():translate(0, 0, 0)
+         )
+      )
+   end)
 
 --- Apply custom camera state if a matrix is present
-apply_camera_matrix = system("apply_camera_matrix")
-   :runs_after(gorb_before_apply_state)
-   :runs_before(gorb_after_apply_state)
-   :reads({C_MATRICES, C_CAMERA})
+apply_camera_matrix = System.new("apply_camera_matrix")
+   :reads(
+      C_MATRICES .. C_CAMERA,
+      C_NOT_CAM_FLAG
+   )
    :writes(C_CAM_FLAG)
-   :via(function(state)
-      local mat = state[C_MATRICES][C_CAMERA]
+   :via(function(mat_cam)
       set_cam_custom_position_direction(
-         mat.c,
-         mat:getHPB(),
+         mat_cam.c,
+         mat_cam:getHPB(),
          -1,
          true,
          true
       )
-      return {
-         [C_CAM_FLAG] = true
-      }
+      return true
    end)
-   :during(ACTOR_ON_UPDATE)
 
 --- Reset custom camera state if no matrix is present
-reset_camera_matrix = system("reset_camera_matrix")
-   :runs_after(gorb_before_apply_state)
-   :runs_before(gorb_after_apply_state)
-   :with(C_CAM_FLAG)
-   :without({C_MATRICES, C_CAMERA})
+reset_camera_matrix = System.new("reset_camera_matrix")
+   :reads(
+      C_CAM_FLAG,
+      C_MATRICES .. C_NOT_CAMERA
+   )
    :writes(C_CAM_FLAG)
    :via(function()
       printf("Removing custom camera setting")
       remove_cam_custom_position_direction()
-      return {
-         [C_CAM_FLAG] = nil
-      }
    end)
-   :during(ACTOR_ON_UPDATE)
+
+actor_on_update:concat(
+   actor_on_update_start ..
+   actor_relative_camera ..
+   camera_arm ..
+   gorb_before_apply_state ..
+   apply_camera_matrix ..
+   reset_camera_matrix ..
+   gorb_after_apply_state
+)

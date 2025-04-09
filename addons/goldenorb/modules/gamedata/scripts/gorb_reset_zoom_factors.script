@@ -7,14 +7,23 @@
 -- Imports
 
 --- Schedule
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local on_level_call = _cl_schedule.on_level_call
+
+--- Main
+local gorb_before_build_state = gorb_main.gorb_before_build_state
+local gorb_after_build_state = gorb_main.gorb_after_build_state
+
+--- HUD Components
+local C_HUD = gorb_hud_comps.C_HUD
+local C_SCOPE_ZOOM_FACTOR = gorb_hud_comps.C_SCOPE_ZOOM_FACTOR
+local C_GL_ZOOM_FACTOR = gorb_hud_comps.C_GL_ZOOM_FACTOR
+local C_SCOPE_ZOOM_FACTOR_ALT = gorb_hud_comps.C_SCOPE_ZOOM_FACTOR_ALT
 
 --- Weapon
-local inject_weapon_hud = gorb_weapon.inject_weapon_hud
+local inject_hud = gorb_weapon.inject_hud
 
 --- Schedule
-local system = cl_schedule.system
-local O_WRITE = cl_schedule.O_WRITE
+local System = _cl_schedule.System
 
 --- Logging
 local log = cl_logging.logger(
@@ -25,24 +34,19 @@ local log = cl_logging.logger(
 -- Implementation
 
 --- Zero out the zoom factor components
-reset_zoom_factors = system("reset_zoom_factors")
-   :runs_after(inject_weapon_hud)
-   :with("hud")
-   :outputs({
-     hud = {
-         scope_zoom_factor = O_WRITE,
-         gl_zoom_factor = O_WRITE,
-         scope_zoom_factor_alt = O_WRITE,
-      },
-   })
+reset_zoom_factors = System.new("reset_zoom_factors")
+   :writes(
+      C_HUD .. C_SCOPE_ZOOM_FACTOR,
+      C_HUD .. C_GL_ZOOM_FACTOR,
+      C_HUD .. C_SCOPE_ZOOM_FACTOR_ALT
+   )
    :via(function()
-      return {
-         hud = {
-            scope_zoom_factor = 0,
-            gl_zoom_factor = 0,
-            scope_zoom_factor_alt = 0,
-         }
-      }
+      return 0, 0, 0
    end)
-   :during(LEVEL_CALL)
 
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_hud ..
+   reset_zoom_factors ..
+   gorb_after_build_state
+)

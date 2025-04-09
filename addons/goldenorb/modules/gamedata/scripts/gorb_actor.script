@@ -7,9 +7,9 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
+local System = _cl_schedule.System
+local on_level_call = _cl_schedule.on_level_call
+local actor_on_update = _cl_schedule.actor_on_update
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
@@ -17,72 +17,64 @@ local gorb_after_build_state = gorb_main.gorb_after_build_state
 local gorb_before_apply_state = gorb_main.gorb_before_apply_state
 local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 
---- Gimbals
-local C_GIMBALS = gorb_gimbals.C_GIMBALS
+--- Actor Components
+local C_ACTOR = gorb_actor_comps.C_ACTOR
+local C_NOT_ACTOR = gorb_actor_comps.C_NOT_ACTOR
 
---- Matrices
-local C_MATRICES = gorb_matrices.C_MATRICES
+--- Camera Components
+local C_CAMERA = gorb_camera_comps.C_CAMERA
 
--- Constants
+--- Gimbals Components
+local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
 
-C_ACTOR = "actor"
+--- Matrices Components
+local C_MATRICES = gorb_matrices_comps.C_MATRICES
 
 -- Implementation
 
 --- Inject the player actor into the state
-inject_actor = system("inject_actor")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
+inject_actor = System.new("inject_actor")
    :writes(C_ACTOR)
    :via(function()
-      return {
-         actor = db.actor
-      }
+      return db.actor
    end)
-   :during(LEVEL_CALL)
 
 --- Inject the actor gimbal
-inject_actor_gimbal = system("inject_actor_gimbal")
-   :runs_after(gorb_before_build_state)
-   :runs_before(gorb_after_build_state)
-   :without({C_GIMBALS, C_ACTOR})
-   :writes({C_GIMBALS, C_ACTOR})
-   :via(function()
-      return {
-         [C_GIMBALS] = {
-            [C_ACTOR] = vector()
-         }
-      }
-   end)
-   :during(LEVEL_CALL)
+inject_actor_gimbal = System.new("inject_actor_gimbal")
+   :reads(C_GIMBALS .. C_NOT_ACTOR)
+   :writes(C_GIMBALS .. C_ACTOR)
+   :via(vector)
 
 --- Derive the actor matrix from the actor gimbal
-derive_actor_matrix = system("derive_actor_matrix")
-   :runs_after(inject_actor_gimbal)
-   :runs_before(gorb_after_build_state)
-   :reads(C_ACTOR, {C_GIMBALS, C_ACTOR})
-   :writes({C_MATRICES, C_ACTOR})
-   :via(function(state)
-      return {
-         [C_MATRICES] = {
-            [C_ACTOR] = matrix():mul(
-               matrix():identity():translate(state[C_ACTOR]:position()),
-               matrix():setHPB(state[C_GIMBALS][C_ACTOR])
-            )
-         }
-      }
+derive_actor_matrix = System.new("derive_actor_matrix")
+   :reads(C_ACTOR, C_GIMBALS .. C_ACTOR)
+   :writes(C_MATRICES .. C_ACTOR)
+   :via(function(actor, actor_gimbal)
+      return matrix():mul(
+         matrix():identity():translate(actor:position()),
+         matrix():setHPB(actor_gimbal)
+      )
    end)
-   :during(LEVEL_CALL)
+
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_actor ..
+   inject_actor_gimbal ..
+   derive_actor_matrix ..
+   gorb_after_build_state
+)
 
 --- Apply the actor matrix
-apply_actor_matrix = system("apply_actor_matrix")
-   :runs_after(gorb_before_apply_state)
-   :runs_before(gorb_after_apply_state)
-   :reads(C_ACTOR, {C_MATRICES, C_ACTOR}, {C_MATRICES, "camera"})
-   :via(function(state)
-      local actor_hpb = state[C_MATRICES][C_ACTOR]:getHPB()
-      local camera_hpb = state[C_MATRICES]["camera"]:getHPB()
-      state[C_ACTOR]:set_actor_direction(
+apply_actor_matrix = System.new("apply_actor_matrix")
+   :reads(
+      C_ACTOR,
+      C_MATRICES .. C_ACTOR,
+      C_MATRICES .. C_CAMERA
+   )
+   :via(function(actor, mat_actor, mat_cam)
+      local actor_hpb = mat_actor:getHPB()
+      local camera_hpb = mat_cam:getHPB()
+      actor:set_actor_direction(
          vector():set(
             actor_hpb.x,
             camera_hpb.y,
@@ -90,4 +82,9 @@ apply_actor_matrix = system("apply_actor_matrix")
          ):mul(-1)
       )
    end)
-   :during(ACTOR_ON_UPDATE)
+
+actor_on_update:concat(
+   gorb_before_apply_state ..
+   apply_actor_matrix ..
+   gorb_after_apply_state
+)

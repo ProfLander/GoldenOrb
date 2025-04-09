@@ -9,42 +9,40 @@
 -- Imports
 
 --- Schedule
-local system = cl_schedule.system
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
-
---- Function
-local const = cl_function.const
+local System = _cl_schedule.System
+local actor_on_update = _cl_schedule.actor_on_update
+local actor_on_update_start = _cl_schedule.actor_on_update_start
+local actor_on_update_finish = _cl_schedule.actor_on_update_finish
+local on_level_call = _cl_schedule.on_level_call
+local on_level_call_start = _cl_schedule.on_level_call_start
+local on_level_call_finish = _cl_schedule.on_level_call_finish
 
 -- Constants
 
 --- State build barriers
-gorb_before_build_state = system("gorb_before_build_state")
-   :via(const(nil))
-   :during(LEVEL_CALL)
+gorb_before_build_state = System.new("gorb_before_build_state")
+gorb_after_build_state = System.new("gorb_after_build_state")
 
-gorb_after_build_state = system("gorb_after_build_state")
-   :runs_after(gorb_before_build_state)
-   :via(const(nil))
-   :during(LEVEL_CALL)
+on_level_call:concat(
+   on_level_call_start ..
+   gorb_before_build_state ..
+   gorb_after_build_state ..
+   on_level_call_finish
+)
 
 --- State modify barriers
-gorb_before_modify_state = system("gorb_before_modify_state")
-   :via(const(nil))
-   :during(ACTOR_ON_UPDATE)
-
-gorb_after_modify_state = system("gorb_after_modify_state")
-   :runs_after(gorb_before_modify_state)
-   :via(const(nil))
-   :during(ACTOR_ON_UPDATE)
+gorb_before_modify_state = System.new("gorb_before_modify_state")
+gorb_after_modify_state = System.new("gorb_after_modify_state")
 
 --- State apply barriers
-gorb_before_apply_state = system("gorb_before_apply_state")
-   :runs_after(gorb_after_modify_state)
-   :via(const(nil))
-   :during(ACTOR_ON_UPDATE)
+gorb_before_apply_state = System.new("gorb_before_apply_state")
+gorb_after_apply_state = System.new("gorb_after_apply_state")
 
-gorb_after_apply_state = system("gorb_after_apply_state")
-   :runs_after(gorb_before_apply_state)
-   :via(const(nil))
-   :during(ACTOR_ON_UPDATE)
+actor_on_update:concat(
+   actor_on_update_start ..
+   gorb_before_modify_state ..
+   gorb_after_modify_state ..
+   gorb_before_apply_state ..
+   gorb_after_apply_state ..
+   actor_on_update_finish
+)

@@ -6,9 +6,6 @@
 
 -- Imports
 
---- Schedule
-local ACTOR_ON_UPDATE = cl_schedule.ACTOR_ON_UPDATE
-
 --- Main
 local gorb_before_modify_state = gorb_main.gorb_before_modify_state
 local gorb_after_modify_state = gorb_main.gorb_after_modify_state
@@ -27,9 +24,9 @@ local foreach = cl_table.foreach
 local compose = cl_function.compose
 
 --- Schedule
-local system = cl_schedule.system
-local I_READ_MAYBE = cl_schedule.I_READ_MAYBE
-local O_WRITE_MAYBE = cl_schedule.O_WRITE_MAYBE
+local System = _cl_schedule.System
+local Lens = _cl_schedule.Lens
+local actor_on_update = _cl_schedule.actor_on_update
 
 --- Camera
 local get_camera_aim_point = gorb_camera_mcm.get_camera_aim_point
@@ -38,6 +35,16 @@ local get_camera_aim_point = gorb_camera_mcm.get_camera_aim_point
 local parse_vector = cl_string.parse_vector
 local parse_call = cl_string.parse_call
 local trim_ws = cl_string.trim_ws
+
+--- Actor Components
+local C_ACTOR = gorb_actor_comps.C_ACTOR
+
+--- HUD Components
+local C_HUD = gorb_hud_comps.C_HUD
+local C_HANDS_ORIENTATION = gorb_hud_comps.C_HANDS_ORIENTATION
+
+--- Enable Components
+local C_ENABLE = gorb_enable_comps.C_ENABLE
 
 --- MCM Builder
 local ImageWithText = mcm_builder.ImageWithText
@@ -53,6 +60,8 @@ local log = cl_logging.logger(
 -- Constants
 
 BONE_ROOT = "root_stalker"
+
+C_BODY_CAM = Lens.where("body_cam", is_boolean)
 
 -- State
 
@@ -153,23 +162,22 @@ function get_actor_rotation(state)
    return vector():set(yaw, pitch, 0)
 end
 
-body_cam = system("body_cam")
-   :runs_after(gorb_before_modify_state)
-   :runs_before(gorb_after_modify_state)
-   :reads("actor")
-   :maybe_reads("wpn")
-   :inputs({ hud = { hands_orientation = I_READ_MAYBE }})
-   :outputs({
-      cam = {
-         enable = O_WRITE,
-         affect_hud = O_WRITE,
-         pos = O_WRITE,
-         rot = O_WRITE,
-      },
-      hud = {
-         hands_orientation = O_WRITE_MAYBE
-      }
-   })
+--[[
+inject_enabled = System.new("inject_body_cam_enabled")
+   :write(C_ENABLE .. C_BODY_CAM)
+
+body_cam = System.new("body_cam")
+   :reads(
+      C_ACTOR,
+      C_WEAPON,
+      C_HUD .. C_HANDS_ORIENTATION
+   )
+   :writes(
+      C_CAMERA .. C_ENABLE,
+      C_CAMERA .. C_AFFECT_HUD,
+      C_CAMERA .. C_POSITION,
+      C_CAMERA .. C_ROTATION
+   )
    :when(function()
       return enabled:get()
    end)
@@ -237,5 +245,10 @@ body_cam = system("body_cam")
 
       return out
    end)
-   :during(ACTOR_ON_UPDATE)
 
+actor_on_update:concat(
+   gorb_before_modify_state ..
+   body_cam ..
+   gorb_after_modify_state
+)
+--]]

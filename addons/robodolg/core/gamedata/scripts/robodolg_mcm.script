@@ -12,19 +12,9 @@
 
 --- MCM Builder
 local Tree = mcm_builder.Tree
-local ImageWithText = mcm_builder.ImageWithText
-local Checkbox = mcm_builder.Checkbox
 
 --- RoboDolg Shapes
 local reset = robodolg_shapes.reset
-
---- GoldenOrb Schedule
-local LEVEL_CALL = cl_schedule.LEVEL_CALL
-local system = cl_schedule.system
-local I_READ = cl_schedule.I_READ
-
---- GoldenOrb Main
-local phase_done = gorb_main.phase_done
 
 --- Logging
 local log = robodolg_logging.log

@@ -22,6 +22,7 @@ local C_WEAPON = gorb_weapon_comps.C_WEAPON
 
 --- Cache Components 
 local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
+local C_NOT_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_NOT_ROBODOLG_CACHE
 
 --- Main 
 local gorb_before_build_state = gorb_main.gorb_before_build_state
@@ -31,9 +32,15 @@ local get_weapon_aim_point = gorb_weapon.get_weapon_aim_point
 local get_fire_bone_position = gorb_weapon.get_fire_bone_position
 local get_fire_bone_rotation = gorb_weapon.get_fire_bone_rotation
 
+inject_robodolg_cache = System.new("inject_robodolg_cache")
+   :reads(C_NOT_ROBODOLG_CACHE)
+   :writes(C_ROBODOLG_CACHE)
+   :via(function()
+      return {}
+   end)
+
 robodolg_cache = System.new("robodolg_cache")
    :reads(
-      C_ACTOR,
       C_WEAPON,
       C_MATRICES .. C_ACTOR,
       C_MATRICES .. C_CAMERA,
@@ -45,8 +52,7 @@ robodolg_cache = System.new("robodolg_cache")
       C_ROBODOLG_CACHE .. C_HUD,
       C_ROBODOLG_CACHE .. C_WEAPON
    )
-   :via(function(actor, weapon, mat_actor, mat_cam, mat_hud)
-      local actor_pos = actor:position()
+   :via(function(weapon, mat_actor, mat_cam, mat_hud)
       local mat_hands = matrix():mul(
          mat_cam,
          mat_hud
@@ -54,9 +60,9 @@ robodolg_cache = System.new("robodolg_cache")
 
       return
          {
-            pos = actor_pos,
+            pos = mat_actor.c,
             aim = vector():add(
-               actor_pos,
+               mat_actor.c,
                vector():mul(
                   mat_actor.k,
                   1000
@@ -89,6 +95,7 @@ robodolg_cache = System.new("robodolg_cache")
 
 on_level_call:concat(
    on_level_call_start ..
+   inject_robodolg_cache ..
    robodolg_cache ..
    gorb_before_build_state
 )

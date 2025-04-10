@@ -9,14 +9,14 @@
 local Lens = _cl_schedule.Lens
 local Prism = _cl_schedule.Prism
 local is_nil = _cl_schedule.is_nil
-local is_number = _cl_schedule.is_nil
+local is_number = _cl_schedule.is_number
 local is_vector = _cl_schedule.is_vector
-local is_table = _cl_schedule.is_table
+local is_non_nil = _cl_schedule.is_non_nil
 
 -- Implementation
 
-C_HUD = Lens.where("hud", is_table)
-C_NOT_HUD = Prism.where("hud", is_nil, is_table)
+C_HUD = Lens.where("hud", is_non_nil)
+C_NOT_HUD = Prism.where("hud", is_nil, is_non_nil)
 
 C_HANDS_POSITION = Lens.where("hands_position", is_vector)
 C_HANDS_ORIENTATION = Lens.where("hands_orientation", is_vector)

@@ -1,17 +1,11 @@
 ----------------------------------------------------------------------------
--- RoboDolg: Enable Components
+-- RoboDolg: Components
 ----------------------------------------------------------------------------
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
 
 local Lens = _cl_schedule.Lens
-local Prism = _cl_schedule.Prism
-local is_nil = _cl_schedule.is_nil
 local is_table = _cl_schedule.is_table
 
--- Implementation
-
-C_ENABLE = Lens.where("enable", is_table)
-C_NOT_ENABLE = Prism.where("enable", is_nil, is_table)
+C_ROBODOLG = Lens.where("robodolg", is_table)

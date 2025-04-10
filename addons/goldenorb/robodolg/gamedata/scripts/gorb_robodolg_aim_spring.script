@@ -19,15 +19,18 @@ local gorb_after_apply_state = gorb_main.gorb_after_apply_state
 --- Enable Components
 local C_ENABLE = gorb_enable_comps.C_ENABLE
 
+--- RoboDolg
+local tree = gorb_robodolg_mcm.tree
+local inject_enable_robodolg = gorb_robodolg_mcm.inject_enable_robodolg
+
+--- Robodolg Components
+local C_ROBODOLG = gorb_robodolg_comps.C_ROBODOLG
+
 --- Cache Components
-local C_ROBODOLG = gorb_robodolg_cache_comps.C_ROBODOLG
 local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
 
 --- Camera Components
 local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- RoboDolg
-local tree = gorb_robodolg_mcm.tree
 
 --- Schedule
 local System = _cl_schedule.System
@@ -70,6 +73,12 @@ inject_should_draw_aim_spring = System.new("inject_should_draw_aim_spring")
    :via(function()
       return should_draw:get() or nil
    end)
+
+on_level_call:concat(
+   inject_enable_robodolg ..
+   inject_should_draw_aim_spring ..
+   gorb_after_build_state
+)
 
 draw_aim_spring = System.new("draw_aim_spring")
    :reads(

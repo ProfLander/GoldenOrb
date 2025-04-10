@@ -203,6 +203,41 @@ local spring_hud = mcm_spring(
 
 -- Implementation
 
+inject_recoil_spring = System.new("inject_recoil_spring")
+   :reads(C_SPRINGS .. C_NOT_RECOIL)
+   :writes(C_SPRINGS .. C_RECOIL)
+   :via(function()
+      return {
+         actor = spring_actor,
+         camera = spring_camera,
+         hud = spring_hud,
+      }
+   end)
+
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_recoil_spring ..
+   gorb_after_build_state
+)
+
+--- Inject the recoil matrix into the state
+inject_recoil_matrix = System.new("inject_recoil_matrix")
+   :reads(C_MATRICES .. C_NOT_RECOIL)
+   :writes(C_MATRICES .. C_RECOIL)
+   :via(function()
+      return {
+         actor = matrix():identity(),
+         camera = matrix():identity(),
+         hud = matrix():identity(),
+      }
+   end)
+
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_recoil_matrix ..
+   gorb_after_build_state
+)
+
 --- Cache a weapon's HUD data before setting it all to 0
 consume_weapon = System.new("consume_weapon")
    :reads(C_WEAPON)
@@ -244,35 +279,8 @@ consume_weapon = System.new("consume_weapon")
       )
    end)
 
-inject_recoil_spring = System.new("inject_recoil_spring")
-   :reads(C_SPRINGS .. C_NOT_RECOIL)
-   :writes(C_SPRINGS .. C_RECOIL)
-   :via(function()
-      return {
-         actor = spring_actor,
-         camera = spring_camera,
-         hud = spring_hud,
-      }
-   end)
-
-
---- Inject the recoil matrix into the state
-inject_recoil_matrix = System.new("inject_recoil_matrix")
-   :reads(C_MATRICES .. C_NOT_RECOIL)
-   :writes(C_MATRICES .. C_RECOIL)
-   :via(function()
-      return {
-         actor = matrix():identity(),
-         camera = matrix():identity(),
-         hud = matrix():identity(),
-      }
-   end)
-
 on_level_call:concat(
-   gorb_before_build_state ..
    inject_weapon ..
-   inject_recoil_spring ..
-   inject_recoil_matrix ..
    consume_weapon ..
    gorb_after_build_state
 )
@@ -460,45 +468,35 @@ integrate_recoil = System.new("integrate_recoil")
 --- Apply recoil forces to the actor matrix
 apply_actor_recoil = System.new("apply_actor_recoil")
    :reads(
-      C_MATRICES .. C_RECOIL .. C_ACTOR,
-      C_MATRICES .. C_ACTOR
+      C_MATRICES .. C_ACTOR,
+      C_MATRICES .. C_RECOIL .. C_ACTOR
    )
-   :writes(
-      C_MATRICES .. C_ACTOR
-   )
+   :writes(C_MATRICES .. C_ACTOR)
    :via(function(mat_actor, mat_recoil)
-      return matrix():mul(
-         mat_actor,
-         mat_recoil
-      )
+      return matrix():mul(mat_actor, mat_recoil)
    end)
 
 --- Apply recoil forces to the camera matrix
 apply_camera_recoil = System.new("apply_camera_recoil")
    :reads(
-      C_MATRICES .. C_RECOIL .. C_CAMERA,
-      C_MATRICES .. C_CAMERA
+      C_MATRICES .. C_CAMERA,
+      C_MATRICES .. C_RECOIL .. C_CAMERA
    )
-   :writes(
-      C_MATRICES, C_CAMERA
-   )
-   :via(function(mat_recoil, mat_camera)
-      return matrix():mul(
-         mat_camera,
-         mat_recoil
-      )
+   :writes(C_MATRICES .. C_CAMERA)
+   :via(function(mat_camera, mat_recoil)
+      return matrix():mul(mat_camera, mat_recoil)
    end)
 
 --- Apply recoil forces to the HUD matrix
 apply_hud_recoil = System.new("apply_hud_recoil")
    :reads(
-      C_MATRICES .. C_RECOIL .. C_HUD,
-      C_MATRICES .. C_HUD
+      C_MATRICES .. C_HUD,
+      C_MATRICES .. C_RECOIL .. C_HUD
    )
    :writes(
       C_MATRICES .. C_HUD
    )
-   :via(function(mat_recoil, mat_hud)
+   :via(function(mat_hud, mat_recoil)
       return matrix():mul(mat_hud, mat_recoil)
    end)
 

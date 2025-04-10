@@ -15,10 +15,19 @@ local System = _cl_schedule.System
 local actor_on_update = _cl_schedule.actor_on_update
 local actor_on_update_start = _cl_schedule.actor_on_update_start
 local actor_on_update_finish = _cl_schedule.actor_on_update_finish
+local on_level_call = _cl_schedule.on_level_call
+local on_level_call_start = _cl_schedule.on_level_call_start
+local on_level_call_finish = _cl_schedule.on_level_call_finish
 
 --- Main
 local gorb_before_modify_state = gorb_main.gorb_before_modify_state
 local gorb_after_apply_state = gorb_main.gorb_after_apply_state
+
+--- Enable Components
+local C_ENABLE = gorb_enable_comps.C_ENABLE
+
+--- Robodolg Components
+local C_ROBODOLG = gorb_robodolg_comps.C_ROBODOLG
 
 --- Matrices Components
 local C_MATRICES = gorb_matrices_comps.C_MATRICES
@@ -36,8 +45,26 @@ tree = mcm_tree:subtrees("goldenorb")
 function robodolg_mcm.reset_pool() end
 function robodolg_camera.update_camera_matrix() end
 
+inject_enable_robodolg = System.new("inject_enable_robodolg")
+   :writes(C_ENABLE .. C_ROBODOLG)
+   :via(function()
+      return {}
+   end)
+
+on_level_call:concat(
+   on_level_call_start ..
+   inject_enable_robodolg ..
+   on_level_call_finish
+)
+
 reset_shapes = System.new("reset_shapes")
    :via(robodolg_shapes.reset)
+
+actor_on_update:concat(
+   actor_on_update_start ..
+   reset_shapes ..
+   gorb_before_modify_state
+)
 
 update_camera_matrix = System.new("update_camera_matrix")
    :reads(C_MATRICES .. C_CAMERA)
@@ -46,9 +73,6 @@ update_camera_matrix = System.new("update_camera_matrix")
    end)
 
 actor_on_update:concat(
-   actor_on_update_start ..
-   reset_shapes ..
-   gorb_before_modify_state ..
    gorb_after_apply_state ..
    update_camera_matrix ..
    actor_on_update_finish

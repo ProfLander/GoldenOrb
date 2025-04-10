@@ -24,8 +24,14 @@ local C_NOT_ACTOR = gorb_actor_comps.C_NOT_ACTOR
 --- Camera Components
 local C_CAMERA = gorb_camera_comps.C_CAMERA
 
+--- Gimbals
+local inject_gimbals = gorb_gimbals.inject_gimbals
+
 --- Gimbals Components
 local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
+
+--- Matrices
+local inject_matrices = gorb_matrices.inject_matrices
 
 --- Matrices Components
 local C_MATRICES = gorb_matrices_comps.C_MATRICES
@@ -39,11 +45,23 @@ inject_actor = System.new("inject_actor")
       return db.actor
    end)
 
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_actor ..
+   gorb_after_build_state
+)
+
 --- Inject the actor gimbal
 inject_actor_gimbal = System.new("inject_actor_gimbal")
    :reads(C_GIMBALS .. C_NOT_ACTOR)
    :writes(C_GIMBALS .. C_ACTOR)
    :via(vector)
+
+on_level_call:concat(
+   inject_gimbals ..
+   inject_actor_gimbal ..
+   gorb_after_build_state
+)
 
 --- Derive the actor matrix from the actor gimbal
 derive_actor_matrix = System.new("derive_actor_matrix")
@@ -57,9 +75,9 @@ derive_actor_matrix = System.new("derive_actor_matrix")
    end)
 
 on_level_call:concat(
-   gorb_before_build_state ..
    inject_actor ..
    inject_actor_gimbal ..
+   inject_matrices ..
    derive_actor_matrix ..
    gorb_after_build_state
 )

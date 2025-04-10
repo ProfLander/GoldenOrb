@@ -48,8 +48,10 @@ local C_HUD = gorb_hud_comps.C_HUD
 --- Weapon Components
 local C_WEAPON = gorb_weapon_comps.C_WEAPON
 
+--- Robodolg Components
+local C_ROBODOLG = gorb_robodolg_comps.C_ROBODOLG
+
 --- Cache Components
-local C_ROBODOLG = gorb_robodolg_cache_comps.C_ROBODOLG
 local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
 local C_ROT = gorb_robodolg_cache_comps.C_ROT
 local C_AIM = gorb_robodolg_cache_comps.C_AIM
@@ -162,41 +164,41 @@ inject_enable_draw_crosshair = System.new("inject_enable_draw_crosshair")
    )
    :via(function()
       return
-         draw_actor:get(),
-         draw_camera:get(),
-         draw_hud:get(),
-         draw_weapon:get()
+         draw_actor:get() or nil,
+         draw_camera:get() or nil,
+         draw_hud:get() or nil,
+         draw_weapon:get() or nil
    end)
 
 --- Actor
 draw_actor_crosshair = System.new("draw_actor_crosshair")
    :reads(
-      C_ROBODOLG_CACHE .. C_ACTOR,
+      C_ROBODOLG_CACHE .. C_ACTOR .. C_AIM,
       C_ENABLE .. C_ROBODOLG .. C_DRAW_CAMERA_CROSSHAIR
    )
-   :via(function(state)
+   :via(function(actor_aim)
       draw_crosshair(
          cross_size:get(),
          ring_size:get(),
          ring_segs:get(),
          COLOR_ACTOR,
-         ui_2d(state.robodolg_cache.actor.aim, true)
+         ui_2d(actor_aim, true)
       )
    end)
 
 --- Camera
 draw_camera_crosshair = System.new("draw_camera_crosshair")
    :reads(
-      C_ROBODOLG_CACHE .. C_CAMERA,
+      C_ROBODOLG_CACHE .. C_CAMERA .. C_AIM,
       C_ENABLE .. C_ROBODOLG .. C_DRAW_CAMERA_CROSSHAIR
    )
-   :via(function(state)
+   :via(function(camera_aim)
       draw_crosshair(
          cross_size:get(),
          ring_size:get(),
          ring_segs:get(),
          COLOR_CAMERA,
-         ui_2d(state.robodolg_cache.camera.aim, true)
+         ui_2d(camera_aim, true)
       )
    end)
 
@@ -243,16 +245,6 @@ draw_weapon_crosshair = System.new("draw_weapon_crosshair")
          )
       )
    end)
-
-printf("Fuck: %s", _cl_schedule.table_to_string({
-   gorb_after_apply_state,
-   inject_enable_draw_crosshair,
-   draw_actor_crosshair,
-   draw_camera_crosshair,
-   draw_hud_crosshair,
-   draw_weapon_crosshair,
-   actor_on_update_finish
-}))
 
 actor_on_update:concat(
    gorb_after_apply_state ..

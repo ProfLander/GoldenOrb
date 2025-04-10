@@ -36,7 +36,18 @@ gorb_after_modify_state = System.new("gorb_after_modify_state")
 
 --- State apply barriers
 gorb_before_apply_state = System.new("gorb_before_apply_state")
+--[[
+   :via(function()
+      printf("before apply state")
+   end)
+--]]
+
 gorb_after_apply_state = System.new("gorb_after_apply_state")
+--[[
+   :via(function()
+      printf("after apply state")
+   end)
+--]]
 
 actor_on_update:concat(
    actor_on_update_start ..

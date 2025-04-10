@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
--- GoldenOrb: Matrices
+-- GoldenOrb: Enable Flags
 ----------------------------------------------------------------------------
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
@@ -14,22 +14,22 @@ local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 --- Matrices Components
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-local C_NOT_MATRICES = gorb_matrices_comps.C_NOT_MATRICES
+local C_ENABLE = gorb_enable_comps.C_ENABLE
+local C_NOT_ENABLE = gorb_enable_comps.C_NOT_ENABLE
 
 -- Implementation
 
---- Inject the matrix container into the state
-inject_matrices = System.new("inject_matrices")
-   :reads(C_NOT_MATRICES)
-   :writes(C_MATRICES)
+--- Inject the enable flag container into the state
+inject_enable = System.new("inject_enable")
+   :reads(C_NOT_ENABLE)
+   :writes(C_ENABLE)
    :via(function()
-      printf("Inject matrices")
+      printf("Inject enable")
       return {}
    end)
 
 on_level_call:concat(
    gorb_before_build_state ..
-   inject_matrices ..
+   inject_enable ..
    gorb_after_build_state
 )

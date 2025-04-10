@@ -307,19 +307,39 @@ inject_weapon = System.new("inject_weapon")
       return actor:active_item()
    end)
 
+on_level_call:concat(
+   inject_actor ..
+   inject_weapon ..
+   gorb_after_build_state
+)
+
+
 --- Inject the weapon's HUD parameters into the state
 inject_hud = System.new("inject_hud")
    :reads(C_WEAPON)
    :writes(C_HUD)
    :via(function(wpn)
-      return get_hud_params(wpn)
+      local params = get_hud_params(wpn)
+      return params
    end)
 
+on_level_call:concat(
+   inject_weapon ..
+   inject_hud ..
+   gorb_after_build_state
+)
+
 inject_hud_gimbal = System.new("inject_hud_gimbal")
-   :reads(C_HUD)
    :reads(C_GIMBALS .. C_NOT_HUD)
    :writes(C_GIMBALS .. C_HUD)
    :via(vector)
+
+on_level_call:concat(
+   inject_hud ..
+   inject_gimbals ..
+   inject_hud_gimbal ..
+   gorb_after_build_state
+)
 
 derive_hud_matrix = System.new("derive_hud_matrix")
    :reads(
@@ -344,11 +364,6 @@ derive_hud_matrix = System.new("derive_hud_matrix")
    end)
 
 on_level_call:concat(
-   gorb_before_build_state ..
-   inject_actor ..
-   inject_weapon ..
-   inject_hud ..
-   inject_gimbals ..
    inject_matrices ..
    inject_hud_gimbal ..
    derive_hud_matrix ..
@@ -365,6 +380,12 @@ apply_hud_matrix = System.new("apply_hud_matrix")
       return mat_hud.c, mat_hud:getHPB():mul(RAD2DEG)
    end)
 
+actor_on_update:concat(
+   gorb_before_apply_state ..
+   apply_hud_matrix ..
+   gorb_after_apply_state
+)
+
 --- Apply aggregated state values to the HUD adjuster
 apply_hud = System.new("apply_hud")
    :reads(C_HUD)
@@ -372,6 +393,12 @@ apply_hud = System.new("apply_hud")
       hud_adjust.enabled(true)
       set_hud_params(hud)
    end)
+
+actor_on_update:concat(
+   apply_hud_matrix ..
+   apply_hud ..
+   gorb_after_apply_state
+)
 
 unapply_hud = System.new("unapply_hud")
    :reads(C_NOT_HUD)
@@ -381,8 +408,6 @@ unapply_hud = System.new("unapply_hud")
 
 actor_on_update:concat(
    gorb_before_apply_state ..
-   apply_hud_matrix ..
-   apply_hud ..
    unapply_hud ..
    gorb_after_apply_state
 )

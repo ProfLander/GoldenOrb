@@ -85,5 +85,12 @@
         "robodolg_vanilla_mcm",
         "gorb_hud",
         "gorb_robodolg_mcm",
+        "gorb_actor_comps",
+        "gorb_camera_comps",
+        "gorb_gimbals_comps",
+        "gorb_matrices_comps",
+        "gorb_recoil_comps",
+        "gorb_springs_comps",
+        "gorb_weapon_comps",
     ],
 }

@@ -154,7 +154,7 @@ handle_mouse = System.new("handle_mouse")
 
          if target == GT_ACTOR then
             gimbal_actor = vector():add(
-               state[C_GIMBALS][C_ACTOR],
+               gimbal_actor,
                vector():set(disp.x, 0, 0)
             )
             gimbal_camera = vector():add(

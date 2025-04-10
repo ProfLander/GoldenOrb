@@ -13,8 +13,14 @@ local tree = gorb_mcm.tree
 local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
+local gorb_before_modify_state = gorb_main.gorb_before_modify_state
+local gorb_after_modify_state = gorb_main.gorb_after_modify_state
+
 local gorb_before_apply_state = gorb_main.gorb_before_apply_state
 local gorb_after_apply_state = gorb_main.gorb_after_apply_state
+
+--- Actor Components
+local derive_actor_matrix = gorb_actor.derive_actor_matrix
 
 --- Actor Components
 local C_ACTOR = gorb_actor_comps.C_ACTOR
@@ -29,6 +35,9 @@ local C_NOT_CAM_FLAG = gorb_camera_comps.C_NOT_CAM_FLAG
 local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
 
 --- Matrices
+local inject_matrices = gorb_matrices.inject_matrices
+
+--- Matrices Components
 local C_MATRICES = gorb_matrices_comps.C_MATRICES
 
 --- Schedule
@@ -128,7 +137,9 @@ inject_camera_gimbal = System.new("inject_camera_gimbal")
    :via(vector)
 
 on_level_call:concat(
-    gorb_before_build_state .. inject_camera_gimbal .. gorb_after_build_state
+   gorb_before_build_state ..
+   inject_camera_gimbal ..
+   gorb_after_build_state
 )
 
 --- Derive the camera matrix from the camera gimbal
@@ -140,7 +151,10 @@ derive_camera_matrix = System.new("derive_camera_matrix")
    end)
 
 on_level_call:concat(
-   inject_camera_gimbal .. derive_camera_matrix .. gorb_after_build_state
+   inject_matrices ..
+   inject_camera_gimbal ..
+   derive_camera_matrix ..
+   gorb_after_build_state
 )
 
 actor_relative_camera = System.new("actor_relative_camera")
@@ -152,6 +166,12 @@ actor_relative_camera = System.new("actor_relative_camera")
    :via(function(mat_actor, mat_camera)
       return matrix():mul(mat_actor, mat_camera)
    end)
+
+actor_on_update:concat(
+   gorb_before_modify_state ..
+   actor_relative_camera ..
+   gorb_after_modify_state
+)
 
 camera_arm = System.new("camera_arm")
    :reads(C_MATRICES .. C_CAMERA)
@@ -166,12 +186,15 @@ camera_arm = System.new("camera_arm")
       )
    end)
 
+actor_on_update:concat(
+   actor_relative_camera ..
+   camera_arm ..
+   gorb_after_modify_state
+)
+
 --- Apply custom camera state if a matrix is present
 apply_camera_matrix = System.new("apply_camera_matrix")
-   :reads(
-      C_MATRICES .. C_CAMERA,
-      C_NOT_CAM_FLAG
-   )
+   :reads(C_MATRICES .. C_CAMERA)
    :writes(C_CAM_FLAG)
    :via(function(mat_cam)
       set_cam_custom_position_direction(
@@ -192,14 +215,10 @@ reset_camera_matrix = System.new("reset_camera_matrix")
    )
    :writes(C_CAM_FLAG)
    :via(function()
-      printf("Removing custom camera setting")
       remove_cam_custom_position_direction()
    end)
 
 actor_on_update:concat(
-   actor_on_update_start ..
-   actor_relative_camera ..
-   camera_arm ..
    gorb_before_apply_state ..
    apply_camera_matrix ..
    reset_camera_matrix ..

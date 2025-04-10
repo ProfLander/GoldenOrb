@@ -289,10 +289,22 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Provides a unified composable interface
   - Nicer OO semantic for sharing
   - Will likely need prisms for dealing with non-present data
+- [X] Integrate new scheduler module with main codebase
 *** To Do
 **** Project
-- [ ] Integrate new scheduler module with main codebase
 - [ ] Split scheduler dependencies out into submodules of ~common-lander~
+- [ ] Concurrency pass
+  - Need to register all systems with minimal dependencies to prevent overconstraint
+- [ ] Delete old ~cl_schedule~ and replace with ~_cl_schedule~
+- [ ] Fix Parallel allocation logic
+  - Curently over-allocating and leaving empties
+    - Not actively breaking anything, but messy and undesirable
+- [ ] ~import~ helper method
+  - Need to be able to ~nil~ check both the target module and members
+  - Use varargs for ergonomic multi-binding
+- [ ] Investigate unary function syntax abuse
+  - ~printf "foo"~ is valid Lua
+  - ~set{1, 2, 3}~ is also valid Lua, where ~set~ is a unary function
 - [ ] Formalize use of ~__index~ and ~__newindex~ and ~__metatable~ for wrapper types
   - Currently using the basic offload-to-table behaviour in most cases
     - Results in a lot of manual unwrapping

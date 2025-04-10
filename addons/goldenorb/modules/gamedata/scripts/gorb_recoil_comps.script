@@ -10,6 +10,7 @@
 Lens = _cl_schedule.Lens
 Prism = _cl_schedule.Prism
 is_nil = _cl_schedule.is_nil
+is_non_nil = _cl_schedule.is_non_nil
 is_table = _cl_schedule.is_table
 is_matrix = _cl_schedule.is_matrix
 
@@ -18,6 +19,6 @@ is_matrix = _cl_schedule.is_matrix
 C_RECOIL = Lens.where("recoil", is_table)
 C_NOT_RECOIL = Prism.where("recoil", is_nil, is_table)
 
-C_ACTOR = Lens.where("actor", is_matrix)
-C_CAMERA = Lens.where("camera", is_matrix)
-C_HUD = Lens.where("hud", is_matrix)
+C_ACTOR = Lens.where("actor", is_non_nil)
+C_CAMERA = Lens.where("camera", is_non_nil)
+C_HUD = Lens.where("hud", is_non_nil)

@@ -293,6 +293,9 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
 *** To Do
 **** Project
 - [ ] Split scheduler dependencies out into submodules of ~common-lander~
+- [ ] Fix memory leak
+  - Likely caused by allocation of input / output tables during system execution
+    - Creates a lot of garbage; should use statically-allocated tables and clear them instead
 - [ ] Concurrency pass
   - Need to register all systems with minimal dependencies to prevent overconstraint
 - [ ] Delete old ~cl_schedule~ and replace with ~_cl_schedule~

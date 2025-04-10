@@ -10,11 +10,11 @@
 local tree = gorb_mcm.tree
 
 --- Schedule
-local actor_on_update = _cl_schedule.actor_on_update
-local on_level_call = _cl_schedule.on_level_call
-local actor_on_weapon_fired = _cl_schedule.actor_on_weapon_fired
-local actor_on_weapon_fired_start = _cl_schedule.actor_on_weapon_fired_start
-local actor_on_weapon_fired_finish = _cl_schedule.actor_on_weapon_fired_finish
+local actor_on_update = cl_schedule.actor_on_update
+local on_level_call = cl_schedule.on_level_call
+local actor_on_weapon_fired = cl_schedule.actor_on_weapon_fired
+local actor_on_weapon_fired_start = cl_schedule.actor_on_weapon_fired_start
+local actor_on_weapon_fired_finish = cl_schedule.actor_on_weapon_fired_finish
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
@@ -61,7 +61,7 @@ local foreach = cl_table.foreach
 local deg = cl_math.deg
 
 --- Schedule
-local System = _cl_schedule.System
+local System = cl_schedule.System
 
 --- MCM Builder
 local Title = mcm_builder.Title

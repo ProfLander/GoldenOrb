@@ -4,6 +4,7 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
+--[[
 -- Imports
 
 --- Math
@@ -33,12 +34,12 @@ local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
 local C_CAMERA = gorb_camera_comps.C_CAMERA
 
 --- Schedule
-local System = _cl_schedule.System
-local Lens = _cl_schedule.Lens
-local actor_on_update = _cl_schedule.actor_on_update
-local actor_on_update_finish = _cl_schedule.actor_on_update_finish
-local is_non_nil = _cl_schedule.is_non_nil
-local is_boolean = _cl_schedule.is_boolean
+local System = cl_schedule.System
+local Lens = cl_schedule.Lens
+local actor_on_update = cl_schedule.actor_on_update
+local actor_on_update_finish = cl_schedule.actor_on_update_finish
+local is_non_nil = cl_schedule.is_non_nil
+local is_boolean = cl_schedule.is_boolean
 
 --- Shapes
 local draw_line = robodolg_shapes.draw_line
@@ -89,6 +90,7 @@ draw_aim_spring = System.new("draw_aim_spring")
    :via(function(spring_aim, camera)
       local length = parse_vector(spring_aim.length:get()):mul(DEG2RAD)
       log("length: %s", length)
+--]]
 
       --[[
       local ty = spring_aim.type:get()
@@ -123,6 +125,7 @@ draw_aim_spring = System.new("draw_aim_spring")
       end
       --]]
 
+--[[
       local cam_aim = camera.aim
       local acc = nil
       for i=1,32 do
@@ -150,3 +153,4 @@ actor_on_update:concat(
    draw_aim_spring ..
    actor_on_update_finish
 )
+--]]

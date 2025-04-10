@@ -6,11 +6,11 @@
 
 -- Imports
 
-local Lens = _cl_schedule.Lens
-local Prism = _cl_schedule.Prism
-local is_nil = _cl_schedule.is_nil
-local is_table = _cl_schedule.is_table
-local is_vector = _cl_schedule.is_vector
+local Lens = cl_schedule.Lens
+local Prism = cl_schedule.Prism
+local is_nil = cl_schedule.is_nil
+local is_table = cl_schedule.is_table
+local is_vector = cl_schedule.is_vector
 
 C_ROBODOLG_CACHE = Lens.where("robodolg_cache", is_table)
 C_NOT_ROBODOLG_CACHE = Prism.where("robodolg_cache", is_nil, is_table)

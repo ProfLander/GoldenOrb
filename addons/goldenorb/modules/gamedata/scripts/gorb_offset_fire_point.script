@@ -7,9 +7,9 @@
 -- Imports
 
 --- Schedule
-local System = _cl_schedule.System
-local on_level_call = _cl_schedule.on_level_call
-local on_level_call_finish = _cl_schedule.on_level_call_finish
+local System = cl_schedule.System
+local on_level_call = cl_schedule.on_level_call
+local on_level_call_finish = cl_schedule.on_level_call_finish
 
 --- HUD
 local C_HUD = gorb_hud_comps.C_HUD

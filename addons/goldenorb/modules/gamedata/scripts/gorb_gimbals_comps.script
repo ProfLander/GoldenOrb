@@ -6,9 +6,9 @@
 
 -- Imports
 
-local Lens = _cl_schedule.Lens
-local is_table = _cl_schedule.is_table
-local is_nil = _cl_schedule.is_nil
+local Lens = cl_schedule.Lens
+local is_table = cl_schedule.is_table
+local is_nil = cl_schedule.is_nil
 
 -- Implementation
 

@@ -7,8 +7,8 @@
 -- Imports
 
 --- Scheudle
-local actor_on_update = _cl_schedule.actor_on_update
-local on_level_call = _cl_schedule.on_level_call
+local actor_on_update = cl_schedule.actor_on_update
+local on_level_call = cl_schedule.on_level_call
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state
@@ -54,7 +54,7 @@ local foreach = cl_table.foreach
 local hpb_to_direction = cl_math.hpb_to_direction
 
 --- Schedule
-local System = _cl_schedule.System
+local System = cl_schedule.System
 
 --- HUD Components
 local C_HANDS_POSITION = gorb_hud_comps.C_HANDS_POSITION

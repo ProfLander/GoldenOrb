@@ -27,11 +27,11 @@ local Trackbar = mcm_builder.Trackbar
 local tree = gorb_robodolg_mcm.tree
 
 --- Schedule
-local System = _cl_schedule.System
-local Lens = _cl_schedule.Lens
-local is_boolean = _cl_schedule.is_boolean
-local actor_on_update = _cl_schedule.actor_on_update
-local actor_on_update_finish = _cl_schedule.actor_on_update_finish
+local System = cl_schedule.System
+local Lens = cl_schedule.Lens
+local is_boolean = cl_schedule.is_boolean
+local actor_on_update = cl_schedule.actor_on_update
+local actor_on_update_finish = cl_schedule.actor_on_update_finish
 
 --- Enable Components
 local C_ENABLE = gorb_enable_comps.C_ENABLE

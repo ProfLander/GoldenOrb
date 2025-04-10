@@ -7,8 +7,8 @@
 -- Imports
 
 --- Schedule
-local actor_on_update = _cl_schedule.actor_on_update
-local actor_on_update_start = _cl_schedule.actor_on_update_start
+local actor_on_update = cl_schedule.actor_on_update
+local actor_on_update_start = cl_schedule.actor_on_update_start
 
 --- Main
 local gorb_before_modify_state = gorb_main.gorb_before_modify_state
@@ -30,7 +30,7 @@ local C_MATRICES = gorb_matrices_comps.C_MATRICES
 local hpb_to_direction = cl_math.hpb_to_direction
 
 --- Schedule
-local System = _cl_schedule.System
+local System = cl_schedule.System
 
 --- Logging
 local log = cl_logging.logger(

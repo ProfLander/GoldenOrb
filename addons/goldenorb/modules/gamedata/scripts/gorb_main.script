@@ -9,13 +9,13 @@
 -- Imports
 
 --- Schedule
-local System = _cl_schedule.System
-local actor_on_update = _cl_schedule.actor_on_update
-local actor_on_update_start = _cl_schedule.actor_on_update_start
-local actor_on_update_finish = _cl_schedule.actor_on_update_finish
-local on_level_call = _cl_schedule.on_level_call
-local on_level_call_start = _cl_schedule.on_level_call_start
-local on_level_call_finish = _cl_schedule.on_level_call_finish
+local System = cl_schedule.System
+local actor_on_update = cl_schedule.actor_on_update
+local actor_on_update_start = cl_schedule.actor_on_update_start
+local actor_on_update_finish = cl_schedule.actor_on_update_finish
+local on_level_call = cl_schedule.on_level_call
+local on_level_call_start = cl_schedule.on_level_call_start
+local on_level_call_finish = cl_schedule.on_level_call_finish
 
 -- Constants
 

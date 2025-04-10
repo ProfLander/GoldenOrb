@@ -7,12 +7,12 @@
 -- Imports
 
 --- Schedule
-Lens = _cl_schedule.Lens
-Prism = _cl_schedule.Prism
-is_nil = _cl_schedule.is_nil
-is_non_nil = _cl_schedule.is_non_nil
-is_table = _cl_schedule.is_table
-is_matrix = _cl_schedule.is_matrix
+Lens = cl_schedule.Lens
+Prism = cl_schedule.Prism
+is_nil = cl_schedule.is_nil
+is_non_nil = cl_schedule.is_non_nil
+is_table = cl_schedule.is_table
+is_matrix = cl_schedule.is_matrix
 
 -- Implementation 
 

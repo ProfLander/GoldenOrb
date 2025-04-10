@@ -1,9 +1,9 @@
 -- Imports
 
 --- Schedule
-local System = _cl_schedule.System
-local on_level_call = _cl_schedule.on_level_call
-local on_level_call_start = _cl_schedule.on_level_call_start
+local System = cl_schedule.System
+local on_level_call = cl_schedule.on_level_call
+local on_level_call_start = cl_schedule.on_level_call_start
 
 --- Matrices Components 
 local C_MATRICES = gorb_matrices_comps.C_MATRICES

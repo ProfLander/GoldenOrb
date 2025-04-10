@@ -7,15 +7,15 @@
 -- Imports
 
 --- Schedule
-local System = _cl_schedule.System
-local on_level_call = _cl_schedule.on_level_call
-local on_before_mouse_move = _cl_schedule.on_before_mouse_move
-local on_before_mouse_move_start = _cl_schedule.on_before_mouse_move_start
-local on_before_mouse_move_finish = _cl_schedule.on_before_mouse_move_finish
+local System = cl_schedule.System
+local on_level_call = cl_schedule.on_level_call
+local on_before_mouse_move = cl_schedule.on_before_mouse_move
+local on_before_mouse_move_start = cl_schedule.on_before_mouse_move_start
+local on_before_mouse_move_finish = cl_schedule.on_before_mouse_move_finish
 
-local on_key_press = _cl_schedule.on_key_press
-local on_key_press_start = _cl_schedule.on_key_press_start
-local on_key_press_finish = _cl_schedule.on_key_press_finish
+local on_key_press = cl_schedule.on_key_press
+local on_key_press_start = cl_schedule.on_key_press_start
+local on_key_press_finish = cl_schedule.on_key_press_finish
 
 --- Main
 local gorb_before_build_state = gorb_main.gorb_before_build_state

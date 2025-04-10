@@ -15,8 +15,8 @@ local gorb_after_modify_state = gorb_main.gorb_after_modify_state
 local parse_vector = cl_string.parse_vector
 
 --- Schedule
-local System = _cl_schedule.System
-local actor_on_update = _cl_schedule.actor_on_update
+local System = cl_schedule.System
+local actor_on_update = cl_schedule.actor_on_update
 
 --- MCM Builder
 local Line = mcm_builder.Line

@@ -7,8 +7,8 @@
 -- Imports
 
 --- Schedule
-local System = _cl_schedule.System
-local on_level_call = _cl_schedule.on_level_call
+local System = cl_schedule.System
+local on_level_call = cl_schedule.on_level_call
 
 local gorb_before_build_state = gorb_main.gorb_before_build_state
 local gorb_after_build_state = gorb_main.gorb_after_build_state

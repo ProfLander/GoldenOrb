@@ -41,10 +41,10 @@ local inject_matrices = gorb_matrices.inject_matrices
 local C_MATRICES = gorb_matrices_comps.C_MATRICES
 
 --- Schedule
-local System = _cl_schedule.System
-local on_level_call = _cl_schedule.on_level_call
-local actor_on_update = _cl_schedule.actor_on_update
-local actor_on_update_start = _cl_schedule.actor_on_update_start
+local System = cl_schedule.System
+local on_level_call = cl_schedule.on_level_call
+local actor_on_update = cl_schedule.actor_on_update
+local actor_on_update_start = cl_schedule.actor_on_update_start
 
 --- Level
 local set_cam_custom_position_direction = level.set_cam_custom_position_direction

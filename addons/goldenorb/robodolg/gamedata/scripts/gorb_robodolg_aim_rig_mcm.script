@@ -10,14 +10,14 @@
 local gorb_after_build_state = gorb_main.gorb_after_build_state
 
 --- Schedule
-local System = _cl_schedule.System
-local Lens = _cl_schedule.Lens
-local is_nil = _cl_schedule.is_nil
-local is_boolean = _cl_schedule.is_boolean
-local on_level_call = _cl_schedule.on_level_call
-local actor_on_update = _cl_schedule.actor_on_update
-local actor_on_update_finish = _cl_schedule.actor_on_update_finish
-local or_is = _cl_schedule.or_is
+local System = cl_schedule.System
+local Lens = cl_schedule.Lens
+local is_nil = cl_schedule.is_nil
+local is_boolean = cl_schedule.is_boolean
+local on_level_call = cl_schedule.on_level_call
+local actor_on_update = cl_schedule.actor_on_update
+local actor_on_update_finish = cl_schedule.actor_on_update_finish
+local or_is = cl_schedule.or_is
 
 --- Shapes
 local RED = robodolg_shapes.RED

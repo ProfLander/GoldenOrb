@@ -24,9 +24,9 @@ local foreach = cl_table.foreach
 local compose = cl_function.compose
 
 --- Schedule
-local System = _cl_schedule.System
-local Lens = _cl_schedule.Lens
-local actor_on_update = _cl_schedule.actor_on_update
+local System = cl_schedule.System
+local Lens = cl_schedule.Lens
+local actor_on_update = cl_schedule.actor_on_update
 
 --- Camera
 local get_camera_aim_point = gorb_camera_mcm.get_camera_aim_point

@@ -387,6 +387,15 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
 - [ ] Formalize rotation origin / eye position in free aim
   - Seems to be a translation from the hands' origin, which varies by weapon
     - i.e. Is visible on screen in some cases
+      
+- [ ] 2D and Rotation modes for HUD aiming
+  - Rotation is the existing behaviour
+   - Crosshair moves in spherical space
+   - Is non-linear across X and Y
+  - 2D is traditional mouse cursor behaviour
+    - Crosshair moves in cartesian space
+    - Linear in X and Y
+    - Use IK to orient HUD transform
 
 - [-] Fix incorrect angular spring constraint direction
   - [X] Correct behaviour under current conditions

@@ -6,10 +6,9 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Math
-local deg = cl_math.deg
+cl_import(this, {
+   cl_math = {"deg"}
+})
 
 --- Logging
 local log = cl_logging.logger(

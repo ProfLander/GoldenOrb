@@ -4,26 +4,21 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local on_level_call = cl_schedule.on_level_call
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-local C_SCOPE_ZOOM_FACTOR = gorb_hud_comps.C_SCOPE_ZOOM_FACTOR
-local C_GL_ZOOM_FACTOR = gorb_hud_comps.C_GL_ZOOM_FACTOR
-local C_SCOPE_ZOOM_FACTOR_ALT = gorb_hud_comps.C_SCOPE_ZOOM_FACTOR_ALT
-
---- Weapon
-local inject_hud = gorb_weapon.inject_hud
-
---- Schedule
-local System = cl_schedule.System
+cl_import(this, {
+   cl_schedule = {"on_level_call"},
+   cl_system = {"System"},
+   gorb_main = {
+      "gorb_before_build_state",
+      "gorb_after_build_state"
+   },
+   gorb_hud_comps = {
+      "C_HUD",
+      "C_SCOPE_ZOOM_FACTOR",
+      "C_GL_ZOOM_FACTOR",
+      "C_SCOPE_ZOOM_FACTOR_ALT",
+   },
+   gorb_weapon = {"inject_hud"},
+})
 
 --- Logging
 local log = cl_logging.logger(

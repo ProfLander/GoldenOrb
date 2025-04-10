@@ -4,14 +4,15 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
-local Lens = cl_schedule.Lens
-local Prism = cl_schedule.Prism
-local is_nil = cl_schedule.is_nil
-local is_number = cl_schedule.is_number
-local is_vector = cl_schedule.is_vector
-local is_non_nil = cl_schedule.is_non_nil
+cl_import(this, {
+   cl_optics = {"Lens", "Prism"},
+   cl_types = {
+      "is_nil",
+      "is_number",
+      "is_vector",
+      "is_non_nil",
+   },
+})
 
 -- Implementation
 

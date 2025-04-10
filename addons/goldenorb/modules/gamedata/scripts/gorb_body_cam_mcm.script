@@ -4,52 +4,25 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Main
-local gorb_before_modify_state = gorb_main.gorb_before_modify_state
-local gorb_after_modify_state = gorb_main.gorb_after_modify_state
-
---- Math
-local deg = cl_math.deg
-
---- List
-local map = cl_list.map
-local fold = cl_list.fold
-
---- Table
-local foreach = cl_table.foreach
-
---- Function
-local compose = cl_function.compose
-
---- Schedule
-local System = cl_schedule.System
-local Lens = cl_schedule.Lens
-local actor_on_update = cl_schedule.actor_on_update
-
---- Camera
-local get_camera_aim_point = gorb_camera_mcm.get_camera_aim_point
-
---- String
-local parse_vector = cl_string.parse_vector
-local parse_call = cl_string.parse_call
-local trim_ws = cl_string.trim_ws
-
---- Actor Components
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-local C_HANDS_ORIENTATION = gorb_hud_comps.C_HANDS_ORIENTATION
-
---- Enable Components
-local C_ENABLE = gorb_enable_comps.C_ENABLE
-
---- MCM Builder
-local ImageWithText = mcm_builder.ImageWithText
-local Checkbox = mcm_builder.Checkbox
-local InputField = mcm_builder.InputField
+cl_import(this, {
+   gorb_main = {
+      "gorb_before_modify_state",
+      "gorb_after_modify_state",
+   },
+   cl_math = {"deg"},
+   cl_list = {"map", "fold"},
+   cl_table = {"foreach"},
+   cl_function = {"compose"},
+   cl_system = {"System"},
+   cl_optics = {"Lens"},
+   cl_schedule = {"actor_on_update"},
+   cl_string = {"parse_vector", "parse_call", "trim_ws"},
+   gorb_camera_mcm = {"get_camera_aim_point"},
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_hud_comps = {"C_HUD", "C_HANDS_ORIENTATION"},
+   gorb_enable_comps = {"C_ENABLE"},
+   mcm_builder = {"ImageWithText", "Checkbox", "InputField"},
+})
 
 --- Logging
 local log = cl_logging.logger(

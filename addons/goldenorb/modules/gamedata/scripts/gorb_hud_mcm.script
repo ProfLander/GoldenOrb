@@ -4,33 +4,16 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local actor_on_update = cl_schedule.actor_on_update
-local actor_on_update_start = cl_schedule.actor_on_update_start
-
---- Main
-local gorb_before_modify_state = gorb_main.gorb_before_modify_state
-
---- Weapon
-local get_hud_number = gorb_weapon.get_hud_number
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-local C_AIM_HUD_OFFSET_ROT = gorb_hud_comps.C_AIM_HUD_OFFSET_ROT
-
---- Weapon Components
-local C_WEAPON = gorb_weapon_comps.C_WEAPON
-
---- Matrices Components
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-
---- Math
-local hpb_to_direction = cl_math.hpb_to_direction
-
---- Schedule
-local System = cl_schedule.System
+cl_import(this, {
+   cl_schedule = {"actor_on_update", "actor_on_update_start"},
+   gorb_main = {"gorb_before_modify_state"},
+   gorb_weapon = {"get_hud_number"},
+   gorb_hud_comps = {"C_HUD", "C_AIM_HUD_OFFSET_ROT"},
+   gorb_weapon_comps = {"C_WEAPON"},
+   gorb_matrices_comps = {"C_MATRICES"},
+   cl_math = {"hpb_to_direction"},
+   cl_system = {"System"},
+})
 
 --- Logging
 local log = cl_logging.logger(

@@ -4,68 +4,44 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Goldenorb
-local tree = gorb_mcm.tree
-
---- Schedule
-local actor_on_update = cl_schedule.actor_on_update
-local on_level_call = cl_schedule.on_level_call
-local actor_on_weapon_fired = cl_schedule.actor_on_weapon_fired
-local actor_on_weapon_fired_start = cl_schedule.actor_on_weapon_fired_start
-local actor_on_weapon_fired_finish = cl_schedule.actor_on_weapon_fired_finish
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
-local gorb_after_modify_state = gorb_main.gorb_after_modify_state
-
-local gorb_before_apply_state = gorb_main.gorb_before_apply_state
-
---- Weapon
-local inject_weapon = gorb_weapon.inject_weapon
-
---- Spring
-local mcm_spring = gorb_spring.mcm_spring
-
---- Recoil Components
-local C_RECOIL = gorb_recoil_comps.C_RECOIL
-local C_NOT_RECOIL = gorb_recoil_comps.C_NOT_RECOIL
-
-local C_ACTOR = gorb_recoil_comps.C_ACTOR
-local C_CAMERA = gorb_recoil_comps.C_CAMERA
-local C_HUD = gorb_recoil_comps.C_HUD
-
---- Matrices Components
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-
---- Spring Components
-local C_SPRINGS = gorb_springs_comps.C_SPRINGS
-
---- Weapon Components
-local C_WEAPON = gorb_weapon_comps.C_WEAPON
-
---- Lens
-local lens = cl_lens.lens
-
---- Spring
-local spring_1d = gorb_spring.spring_1d
-local SP_ANGULAR = gorb_spring.SP_ANGULAR
-
---- Table
-local foreach = cl_table.foreach
-
---- Math
-local deg = cl_math.deg
-
---- Schedule
-local System = cl_schedule.System
-
---- MCM Builder
-local Title = mcm_builder.Title
-local Trackbar = mcm_builder.Trackbar
+cl_import(this, {
+   gorb_mcm = {"tree"},
+   cl_schedule = {
+      "actor_on_update",
+      "on_level_call",
+      "actor_on_weapon_fired",
+      "actor_on_weapon_fired_start",
+      "actor_on_weapon_fired_finish",
+   },
+   gorb_main = {
+      "gorb_before_build_state",
+      "gorb_after_build_state",
+      "gorb_before_modify_state",
+      "gorb_after_modify_state",
+      "gorb_before_apply_state",
+   },
+   gorb_weapon = {"inject_weapon"},
+   gorb_spring = {
+      "mcm_spring",
+      "spring_1d",
+      "SP_ANGULAR",
+   },
+   gorb_recoil_comps = {
+      "C_RECOIL",
+      "C_NOT_RECOIL",
+      "C_ACTOR",
+      "C_CAMERA",
+      "C_HUD",
+   },
+   gorb_matrices_comps = {"C_MATRICES"},
+   gorb_springs_comps = {"C_SPRINGS"},
+   gorb_weapon_comps = {"C_WEAPON"},
+   cl_lens = {"lens"},
+   cl_table = {"foreach"},
+   cl_math = {"deg"},
+   cl_system = {"System"},
+   mcm_builder = {"Title", "Trackbar"}
+})
 
 --- Logging
 local log = cl_logging.logger(

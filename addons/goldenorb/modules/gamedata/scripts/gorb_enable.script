@@ -4,18 +4,12 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- Matrices Components
-local C_ENABLE = gorb_enable_comps.C_ENABLE
-local C_NOT_ENABLE = gorb_enable_comps.C_NOT_ENABLE
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {"on_level_call"},
+   gorb_main = {"gorb_before_build_state", "gorb_after_build_state"},
+   gorb_enable_comps = {"C_ENABLE", "C_NOT_ENABLE"}
+})
 
 -- Implementation
 

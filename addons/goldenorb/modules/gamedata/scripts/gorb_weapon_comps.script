@@ -4,9 +4,10 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-local Lens = cl_schedule.Lens
-local is_non_nil = cl_schedule.is_non_nil
+cl_import(this, {
+   cl_optics = {"Lens"},
+   cl_types = {"is_non_nil"}
+})
 
 -- Implementation
 

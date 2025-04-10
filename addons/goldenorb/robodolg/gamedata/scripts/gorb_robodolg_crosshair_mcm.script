@@ -2,72 +2,42 @@
 -- RoboDolg: Crosshair
 ----------------------------------------------------------------------------
 -- Implemented by Lhan
-
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Shapes
-local RED = robodolg_shapes.RED
-local GREEN = robodolg_shapes.GREEN
-local BLUE = robodolg_shapes.BLUE
-local WHITE = robodolg_shapes.WHITE
-local draw_crosshair = robodolg_shapes.draw_crosshair
-
---- Camera
-local ui_2d = robodolg_camera.ui_2d
-
---- MCM Builder
-local ImageWithText = mcm_builder.ImageWithText
-local Title = mcm_builder.Title
-local Checkbox = mcm_builder.Checkbox
-local Trackbar = mcm_builder.Trackbar
-
---- Robodolg
-local tree = gorb_robodolg_mcm.tree
-
---- Schedule
-local System = cl_schedule.System
-local Lens = cl_schedule.Lens
-local is_boolean = cl_schedule.is_boolean
-local actor_on_update = cl_schedule.actor_on_update
-local actor_on_update_finish = cl_schedule.actor_on_update_finish
-
---- Enable Components
-local C_ENABLE = gorb_enable_comps.C_ENABLE
-
---- Actor Components
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- Camera Components
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-
---- Weapon Components
-local C_WEAPON = gorb_weapon_comps.C_WEAPON
-
---- Robodolg Components
-local C_ROBODOLG = gorb_robodolg_comps.C_ROBODOLG
-
---- Cache Components
-local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
-local C_ROT = gorb_robodolg_cache_comps.C_ROT
-local C_AIM = gorb_robodolg_cache_comps.C_AIM
-
---- Main
-local gorb_after_apply_state = gorb_main.gorb_after_apply_state
-
---- Function
-local advise_before = cl_function.advise_before
-local curry_r = cl_function.curry_r
-
---- Math
-local vector_rotate_z = cl_math.vector_rotate_z
-
---- Logging
-local log = robodolg_logging.log
+cl_import(this, {
+   cl_function = {"advise_before", "curry_r"},
+   cl_math = {"vector_rotate_z"},
+   cl_system = {"System"},
+   cl_optics = {"Lens"},
+   cl_types = {
+      "is_boolean",
+   },
+   cl_schedule = {"actor_on_update", "actor_on_update_finish"},
+   gorb_robodolg_mcm = {"tree"},
+   gorb_enable_comps = {"C_ENABLE"},
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_camera_comps = {"C_CAMERA"},
+   gorb_hud_comps = {"C_HUD"},
+   gorb_weapon_comps = {"C_WEAPON"},
+   gorb_robodolg_comps = {"C_ROBODOLG"},
+   gorb_robodolg_cache_comps = {"C_ROBODOLG_CACHE", "C_ROT", "C_AIM"},
+   gorb_main = {"gorb_after_apply_state"},
+   robodolg_shapes = {
+      "RED",
+      "GREEN",
+      "BLUE",
+      "WHITE",
+      "draw_crosshair"
+   },
+   robodolg_camera = {"ui_2d"},
+   robodolg_logging = {"log"},
+   mcm_builder = {
+      "ImageWithText",
+      "Title",
+      "Checkbox",
+      "Trackbar"
+   },
+})
 
 -- Constants
 

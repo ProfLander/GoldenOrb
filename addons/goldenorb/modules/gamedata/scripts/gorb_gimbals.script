@@ -4,19 +4,12 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- Gimbals Components
-local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
-local C_NOT_GIMBALS = gorb_gimbals_comps.C_NOT_GIMBALS
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {"on_level_call"},
+   gorb_main = {"gorb_before_build_state", "gorb_after_build_state"},
+   gorb_gimbals_comps = {"C_GIMBALS", "C_NOT_GIMBALS"},
+})
 
 -- Implementation
 

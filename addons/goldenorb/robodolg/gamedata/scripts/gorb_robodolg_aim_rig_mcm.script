@@ -4,68 +4,49 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Main
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- Schedule
-local System = cl_schedule.System
-local Lens = cl_schedule.Lens
-local is_nil = cl_schedule.is_nil
-local is_boolean = cl_schedule.is_boolean
-local on_level_call = cl_schedule.on_level_call
-local actor_on_update = cl_schedule.actor_on_update
-local actor_on_update_finish = cl_schedule.actor_on_update_finish
-local or_is = cl_schedule.or_is
-
---- Shapes
-local RED = robodolg_shapes.RED
-local GREEN = robodolg_shapes.GREEN
-local CYAN = robodolg_shapes.CYAN
-local MAGENTA = robodolg_shapes.MAGENTA
-local YELLOW = robodolg_shapes.YELLOW
-local WHITE = robodolg_shapes.WHITE
-local draw_line = robodolg_shapes.draw_line
-local draw_ngon = robodolg_shapes.draw_ngon
-
---- Camera
-local ui_2d = robodolg_camera.ui_2d
-
---- Actor Components
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- Camera Components
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-
---- Weapon Components
-local C_WEAPON = gorb_weapon_comps.C_WEAPON
-
---- Enable Components
-local C_ENABLE = gorb_enable_comps.C_ENABLE
-
---- Robodolg
-local inject_enable_robodolg = gorb_robodolg_mcm.inject_enable_robodolg
-
---- Robodolg Components
-local C_ROBODOLG = gorb_robodolg_comps.C_ROBODOLG
-
---- Cache Components
-local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
-local C_POS = gorb_robodolg_cache_comps.C_POS
-local C_AIM = gorb_robodolg_cache_comps.C_AIM
-local C_FIRE_POS = gorb_robodolg_cache_comps.C_FIRE_POS
-
---- RoboDolg
-local tree = gorb_robodolg_mcm.tree
-local update_camera_matrix = gorb_robodolg_mcm.update_camera_matrix
-
---- MCM Builder
-local ImageWithText = mcm_builder.ImageWithText
-local Checkbox = mcm_builder.Checkbox
+cl_import(this, {
+   gorb_main = {"gorb_after_build_state"},
+   cl_system = {"System"},
+   cl_optics = {"Lens"},
+   cl_types = {"is_nil", "is_boolean", "or_is"},
+   cl_schedule = {
+      "on_level_call",
+      "actor_on_update",
+      "actor_on_update_finish"
+   },
+   robodolg_shapes = {
+      "RED",
+      "GREEN",
+      "CYAN",
+      "MAGENTA",
+      "YELLOW",
+      "WHITE",
+      "draw_line",
+      "draw_ngon",
+   },
+   robodolg_camera = {"ui_2d"},
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_camera_comps = {"C_CAMERA"},
+   gorb_hud_comps = {"C_HUD"},
+   gorb_weapon_comps = {"C_WEAPON"},
+   gorb_enable_comps = {"C_ENABLE"},
+   gorb_robodolg_mcm = {
+      "tree",
+      "inject_enable_robodolg",
+      "update_camera_matrix"
+   },
+   gorb_robodolg_comps = {"C_ROBODOLG"},
+   gorb_robodolg_cache_comps = {
+      "C_ROBODOLG_CACHE",
+      "C_POS",
+      "C_AIM",
+      "C_FIRE_POS",
+   },
+   mcm_builder = {
+      "ImageWithText",
+      "Checkbox",
+   },
+})
 
 -- Constants
 

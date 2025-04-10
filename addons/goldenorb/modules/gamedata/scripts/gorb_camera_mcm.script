@@ -4,55 +4,37 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Goldenorb
-local tree = gorb_mcm.tree
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
-local gorb_before_modify_state = gorb_main.gorb_before_modify_state
-local gorb_after_modify_state = gorb_main.gorb_after_modify_state
-
-local gorb_before_apply_state = gorb_main.gorb_before_apply_state
-local gorb_after_apply_state = gorb_main.gorb_after_apply_state
-
---- Actor Components
-local derive_actor_matrix = gorb_actor.derive_actor_matrix
-
---- Actor Components
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- Camera Components
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-local C_NOT_CAMERA = gorb_camera_comps.C_NOT_CAMERA
-local C_CAM_FLAG = gorb_camera_comps.C_CAM_FLAG
-local C_NOT_CAM_FLAG = gorb_camera_comps.C_NOT_CAM_FLAG
-
---- Gimbals Components
-local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
-
---- Matrices
-local inject_matrices = gorb_matrices.inject_matrices
-
---- Matrices Components
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-local actor_on_update = cl_schedule.actor_on_update
-local actor_on_update_start = cl_schedule.actor_on_update_start
-
---- Level
-local set_cam_custom_position_direction = level.set_cam_custom_position_direction
-local remove_cam_custom_position_direction = level.remove_cam_custom_position_direction
-
---- MCM Builder
-local ImageWithText = mcm_builder.ImageWithText
-local Trackbar = mcm_builder.Trackbar
+cl_import(this, {
+   gorb_mcm = {"tree"},
+   gorb_main = {
+      "gorb_before_build_state",
+      "gorb_after_build_state",
+      "gorb_before_modify_state",
+      "gorb_after_modify_state",
+      "gorb_before_apply_state",
+      "gorb_after_apply_state",
+   },
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_camera_comps = {
+      "C_CAMERA",
+      "C_NOT_CAMERA",
+      "C_CAM_FLAG",
+      "C_NOT_CAM_FLAG",
+   },
+   gorb_gimbals_comps = {"C_GIMBALS"},
+   gorb_matrices = {"inject_matrices"},
+   gorb_matrices_comps = {"C_MATRICES"},
+   cl_system = {"System"},
+   cl_schedule = {"on_level_call", "actor_on_update"},
+   level = {
+      "set_cam_custom_position_direction",
+      "remove_cam_custom_position_direction"
+   },
+   mcm_builder = {
+      "ImageWithText",
+      "Trackbar",
+   }
+})
 
 --- Logging
 local log = cl_logging.logger(

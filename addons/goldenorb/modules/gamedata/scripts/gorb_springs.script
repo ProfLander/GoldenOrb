@@ -2,21 +2,15 @@
 -- GoldenOrb: Springs
 ----------------------------------------------------------------------------
 -- Implemented by Lhan
+
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- Springs Components
-local C_SPRINGS = gorb_springs_comps.C_SPRINGS
-local C_NOT_SPRINGS = gorb_springs_comps.C_NOT_SPRINGS
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {"on_level_call"},
+   gorb_main = {"gorb_before_build_state", "gorb_after_build_state"},
+   gorb_springs_comps = {"C_SPRINGS", "C_NOT_SPRINGS"},
+})
 
 -- Implementation
 

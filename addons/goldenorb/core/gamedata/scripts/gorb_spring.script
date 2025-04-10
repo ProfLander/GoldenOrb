@@ -6,24 +6,25 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Math
-local DEG2RAD = cl_math.DEG2RAD
-local sign = cl_math.sign
-local vector_axis_angle = cl_math.vector_axis_angle
-local axis_angle_to_euler = cl_math.axis_angle_to_euler
-
---- MCM Builder
-local Title = mcm_builder.Title
-local List = mcm_builder.List
-local InputField = mcm_builder.InputField
-
---- String
-local parse_vector = cl_string.parse_vector
-
---- Function
-local id = cl_function.id
+cl_import(this, {
+   cl_math = {
+      "DEG2RAD",
+      "sign",
+      "vector_axis_angle",
+      "axis_angle_to_euler",
+   },
+   mcm_builder = {
+      "Title",
+      "List",
+      "InputField",
+   },
+   cl_string = {
+      "parse_vector"
+   },
+   cl_function = {
+      "id"
+   }
+})
 
 --- Logging
 local log = cl_logging.logger(

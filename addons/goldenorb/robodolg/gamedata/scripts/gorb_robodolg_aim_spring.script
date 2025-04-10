@@ -33,8 +33,10 @@ local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
 --- Camera Components
 local C_CAMERA = gorb_camera_comps.C_CAMERA
 
+--- System
+local System = cl_system.System
+
 --- Schedule
-local System = cl_schedule.System
 local Lens = cl_schedule.Lens
 local actor_on_update = cl_schedule.actor_on_update
 local actor_on_update_finish = cl_schedule.actor_on_update_finish

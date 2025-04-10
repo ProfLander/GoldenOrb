@@ -4,33 +4,14 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-local on_level_call_finish = cl_schedule.on_level_call_finish
-
---- HUD
-local C_HUD = gorb_hud_comps.C_HUD
-local C_FIRE_POINT = gorb_hud_comps.C_FIRE_POINT
-local C_FIRE_POINT2 = gorb_hud_comps.C_FIRE_POINT2
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- Weapon
-local inject_hud = gorb_weapon.inject_hud
-
---- Math
-local EPSILON = cl_math.EPSILON
-
---- Log
-local log = cl_logging.logger(
-   "GoldenOrb/Offset Fire Point",
-   cl_logging.TRACE
-)
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {"on_level_call", "on_level_call_finish"},
+   gorb_hud_comps = {"C_HUD", "C_FIRE_POINT", "C_FIRE_POINT2"},
+   gorb_main = {"gorb_before_build_state", "gorb_after_build_state"},
+   gorb_weapon = {"inject_hud"},
+   cl_math = {"EPSILON"}
+})
 
 -- Constants
 

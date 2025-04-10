@@ -8,35 +8,26 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local actor_on_update = cl_schedule.actor_on_update
-local actor_on_update_start = cl_schedule.actor_on_update_start
-local actor_on_update_finish = cl_schedule.actor_on_update_finish
-local on_level_call = cl_schedule.on_level_call
-local on_level_call_start = cl_schedule.on_level_call_start
-local on_level_call_finish = cl_schedule.on_level_call_finish
-
---- Main
-local gorb_before_modify_state = gorb_main.gorb_before_modify_state
-local gorb_after_apply_state = gorb_main.gorb_after_apply_state
-
---- Enable Components
-local C_ENABLE = gorb_enable_comps.C_ENABLE
-
---- Robodolg Components
-local C_ROBODOLG = gorb_robodolg_comps.C_ROBODOLG
-
---- Matrices Components
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-
---- Camera Components
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- Robodolg
-local mcm_tree = robodolg_mcm.tree
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {
+      "actor_on_update",
+      "actor_on_update_start",
+      "actor_on_update_finish",
+      "on_level_call",
+      "on_level_call_start",
+      "on_level_call_finish",
+   },
+   gorb_main = {
+      "gorb_before_modify_state",
+      "gorb_after_modify_state",
+   },
+   gorb_enable_comps = {"C_ENABLE"},
+   gorb_robodolg_comps = {"C_ROBODOLG"},
+   gorb_matrices_comps = {"C_MATRICES"},
+   gorb_camera_comps = {"C_CAMERA"},
+   robodolg_mcm = {{tree = "mcm_tree"}}
+})
 
 -- State
 

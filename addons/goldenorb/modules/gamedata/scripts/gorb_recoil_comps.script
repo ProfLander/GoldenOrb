@@ -4,15 +4,10 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-Lens = cl_schedule.Lens
-Prism = cl_schedule.Prism
-is_nil = cl_schedule.is_nil
-is_non_nil = cl_schedule.is_non_nil
-is_table = cl_schedule.is_table
-is_matrix = cl_schedule.is_matrix
+cl_import(this, {
+   cl_optics = {"Lens", "Prism"},
+   cl_types = {"is_nil", "is_non_nil", "is_table", "is_matrix"},
+})
 
 -- Implementation 
 

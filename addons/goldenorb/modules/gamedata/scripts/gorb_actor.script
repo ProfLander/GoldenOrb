@@ -4,37 +4,38 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-local actor_on_update = cl_schedule.actor_on_update
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-local gorb_before_apply_state = gorb_main.gorb_before_apply_state
-local gorb_after_apply_state = gorb_main.gorb_after_apply_state
-
---- Actor Components
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-local C_NOT_ACTOR = gorb_actor_comps.C_NOT_ACTOR
-
---- Camera Components
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- Gimbals
-local inject_gimbals = gorb_gimbals.inject_gimbals
-
---- Gimbals Components
-local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
-
---- Matrices
-local inject_matrices = gorb_matrices.inject_matrices
-
---- Matrices Components
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {
+      "on_level_call",
+      "actor_on_update"
+   },
+   gorb_main = {
+      "gorb_before_build_state",
+      "gorb_after_build_state",
+      "gorb_before_apply_state",
+      "gorb_after_apply_state",
+   },
+   gorb_actor_comps = {
+      "C_ACTOR",
+      "C_NOT_ACTOR"
+   },
+   gorb_camera_comps = {
+      "C_CAMERA"
+   },
+   gorb_gimbals = {
+      "inject_gimbals"
+   },
+   gorb_gimbals_comps = {
+      "C_GIMBALS"
+   },
+   gorb_matrices = {
+      "inject_matrices"
+   },
+   gorb_matrices_comps = {
+      "C_MATRICES"
+   }
+})
 
 -- Implementation
 

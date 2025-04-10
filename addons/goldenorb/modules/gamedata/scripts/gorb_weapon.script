@@ -4,61 +4,34 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Scheudle
-local actor_on_update = cl_schedule.actor_on_update
-local on_level_call = cl_schedule.on_level_call
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-local gorb_before_apply_state = gorb_main.gorb_before_apply_state
-local gorb_after_apply_state = gorb_main.gorb_after_apply_state
-
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-local C_NOT_HUD = gorb_hud_comps.C_NOT_HUD
-
---- Actor Components
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- Weapon Components
-local C_WEAPON = gorb_weapon_comps.C_WEAPON
-
---- Gimbals
-local inject_gimbals = gorb_gimbals.inject_gimbals
-
---- Matrices
-local inject_matrices = gorb_matrices.inject_matrices
-
---- Gimbals Components
-local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
-
---- Matrices
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-
---- Math
-local RAD2DEG = cl_math.RAD2DEG
-local DEG2RAD = cl_math.DEG2RAD
-
---- Actor
-local inject_actor = gorb_actor.inject_actor
-
---- Table
-local map = cl_table.map
-local foreach = cl_table.foreach
-
---- Math
-local hpb_to_direction = cl_math.hpb_to_direction
-
---- Schedule
-local System = cl_schedule.System
-
---- HUD Components
-local C_HANDS_POSITION = gorb_hud_comps.C_HANDS_POSITION
-local C_HANDS_ORIENTATION = gorb_hud_comps.C_HANDS_ORIENTATION
+cl_import(this, {
+   cl_schedule = {"actor_on_update", "on_level_call"},
+   gorb_main = {
+      "gorb_after_build_state",
+      "gorb_before_apply_state",
+      "gorb_after_apply_state",
+   },
+   gorb_hud_comps = {
+      "C_HUD",
+      "C_NOT_HUD",
+      "C_HANDS_POSITION",
+      "C_HANDS_ORIENTATION",
+   },
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_weapon_comps = {"C_WEAPON"},
+   gorb_gimbals = {"inject_gimbals"},
+   gorb_matrices = {"inject_matrices"},
+   gorb_gimbals_comps = {"C_GIMBALS"},
+   gorb_matrices_comps = {"C_MATRICES"},
+   cl_math = {
+      "RAD2DEG",
+      "DEG2RAD",
+      "hpb_to_direction",
+   },
+   gorb_actor = {"inject_actor"},
+   cl_table = {"map", "foreach"},
+   cl_system = {"System"},
+})
 
 --- Logging
 local log = cl_logging.logger(

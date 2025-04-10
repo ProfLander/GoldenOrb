@@ -90,6 +90,10 @@ function draw_bones()
    foreach(
       cache,
       function(_, bone)
+         assert(type(bone) == "table", "Bone is not a table")
+         assert(bone.pos ~= nil, "Bone position is nil")
+         assert(bone.rot ~= nil, "Bone rotation is nil")
+
          draw_ngon(
             POLY_SIZE,
             POLY_SIDES,

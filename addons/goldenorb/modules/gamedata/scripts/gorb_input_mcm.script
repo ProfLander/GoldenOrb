@@ -4,51 +4,37 @@
 -- Implemented by Lhan
 ----------------------------------------------------------------------------
 
--- Imports
-
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-local on_before_mouse_move = cl_schedule.on_before_mouse_move
-local on_before_mouse_move_start = cl_schedule.on_before_mouse_move_start
-local on_before_mouse_move_finish = cl_schedule.on_before_mouse_move_finish
-
-local on_key_press = cl_schedule.on_key_press
-local on_key_press_start = cl_schedule.on_key_press_start
-local on_key_press_finish = cl_schedule.on_key_press_finish
-
---- Main
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-local gorb_after_build_state = gorb_main.gorb_after_build_state
-
---- Input Components
-local C_GIMBAL_TARGET = gorb_input_comps.C_GIMBAL_TARGET
-local C_MAYBE_GIMBAL_TARGET = gorb_input_comps.C_MAYBE_GIMBAL_TARGET
-local C_NOT_GIMBAL_TARGET = gorb_input_comps.C_NOT_GIMBAL_TARGET
-
-local C_KEYBOARD = gorb_input_comps.C_KEYBOARD
-local C_KEY = gorb_input_comps.C_KEY
-
-local C_MOUSE = gorb_input_comps.C_MOUSE
-local C_OVERRIDE = gorb_input_comps.C_OVERRIDE
-
---- Gimbal
-local C_GIMBALS = gorb_gimbals_comps.C_GIMBALS
-
---- Actor
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- Camera
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- HUD Components
-local C_HUD = gorb_hud_comps.C_HUD
-
---- GoldenOrb
-local tree = gorb_mcm.tree
-
---- MCM Builder
-local KeybindBox = mcm_builder.KeybindBox
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {
+      "on_level_call",
+      "on_before_mouse_move",
+      "on_before_mouse_move_start",
+      "on_before_mouse_move_finish",
+      "on_key_press",
+      "on_key_press_start",
+      "on_key_press_finish",
+   },
+   gorb_main = {
+      "gorb_before_build_state",
+      "gorb_after_build_state",
+   },
+   gorb_input_comps = {
+      "C_GIMBAL_TARGET",
+      "C_MAYBE_GIMBAL_TARGET",
+      "C_NOT_GIMBAL_TARGET",
+      "C_KEYBOARD",
+      "C_KEY",
+      "C_MOUSE",
+      "C_OVERRIDE",
+   },
+   gorb_gimbals_comps = {"C_GIMBALS"},
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_camera_comps = {"C_CAMERA"},
+   gorb_hud_comps = {"C_HUD"},
+   gorb_mcm = {"tree"},
+   mcm_builder = {"KeybindBox"},
+})
 
 --- Logging
 local log = cl_logging.logger(

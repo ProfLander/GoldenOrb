@@ -1,36 +1,30 @@
--- Imports
+----------------------------------------------------------------------------
+-- RoboDolg: Components
+----------------------------------------------------------------------------
+-- Implemented by Lhan
+----------------------------------------------------------------------------
 
---- Schedule
-local System = cl_schedule.System
-local on_level_call = cl_schedule.on_level_call
-local on_level_call_start = cl_schedule.on_level_call_start
+cl_import(this, {
+   cl_system = {"System"},
+   cl_schedule = {"on_level_call", "on_level_call_start"},
+   gorb_matrices_comps = {"C_MATRICES"},
+   gorb_actor_comps = {"C_ACTOR"},
+   gorb_camera_comps = {"C_CAMERA"},
+   gorb_hud_comps = {"C_HUD"},
+   gorb_weapon_comps = {"C_WEAPON"},
+   gorb_robodolg_cache_comps = {
+      "C_ROBODOLG_CACHE",
+      "C_NOT_ROBODOLG_CACHE",
+   },
+   gorb_main = {"gorb_before_build_state"},
+   gorb_weapon = {
+      "get_weapon_aim_point",
+      "get_fire_bone_position",
+      "get_fire_bone_rotation",
+   }
+})
 
---- Matrices Components 
-local C_MATRICES = gorb_matrices_comps.C_MATRICES
-
---- Actor Components 
-local C_ACTOR = gorb_actor_comps.C_ACTOR
-
---- Camera Components 
-local C_CAMERA = gorb_camera_comps.C_CAMERA
-
---- HUD Components 
-local C_HUD = gorb_hud_comps.C_HUD
-
---- Weapon Components 
-local C_WEAPON = gorb_weapon_comps.C_WEAPON
-
---- Cache Components 
-local C_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_ROBODOLG_CACHE
-local C_NOT_ROBODOLG_CACHE = gorb_robodolg_cache_comps.C_NOT_ROBODOLG_CACHE
-
---- Main 
-local gorb_before_build_state = gorb_main.gorb_before_build_state
-
---- Weapon
-local get_weapon_aim_point = gorb_weapon.get_weapon_aim_point
-local get_fire_bone_position = gorb_weapon.get_fire_bone_position
-local get_fire_bone_rotation = gorb_weapon.get_fire_bone_rotation
+-- Implementation
 
 inject_robodolg_cache = System.new("inject_robodolg_cache")
    :reads(C_NOT_ROBODOLG_CACHE)

@@ -6,7 +6,7 @@
 
 cl_import(this, {
    cl_function = {"curry_r"},
-   cl_monkey = {"monkey_before"},
+   cl_monkey = {"monkey_around"},
    cl_math = {"vector_rotate_z"},
    cl_system = {"System"},
    cl_optics = {"Lens"},
@@ -117,7 +117,7 @@ function vert(v, cond, r)
    log("vert(%s, %s, %s)", v, cond, r)
    local out = ui_2d(v, true)
    return cond
-      and monkey_before(out, curry_r(vector_rotate_z, r))
+      and monkey_around(out, curry_r(vector_rotate_z, r))
       or out
 end
 

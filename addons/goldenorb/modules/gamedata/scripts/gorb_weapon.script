@@ -286,7 +286,6 @@ on_level_call:concat(
    gorb_after_build_state
 )
 
-
 --- Inject the weapon's HUD parameters into the state
 inject_hud = System.new("inject_hud")
    :reads(C_WEAPON)

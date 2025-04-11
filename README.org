@@ -290,36 +290,38 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Nicer OO semantic for sharing
   - Will likely need prisms for dealing with non-present data
 - [X] Integrate new scheduler module with main codebase
-*** To Do
-**** Project
-- [ ] Split scheduler dependencies out into submodules of ~common-lander~
-- [ ] Fix memory leak
-  - Likely caused by allocation of input / output tables during system execution
-    - Creates a lot of garbage; should use statically-allocated tables and clear them instead
-- [ ] Concurrency pass
-  - Need to register all systems with minimal dependencies to prevent overconstraint
-- [ ] Delete old ~cl_schedule~ and replace with ~_cl_schedule~
-- [ ] Fix Parallel allocation logic
-  - Curently over-allocating and leaving empties
-    - Not actively breaking anything, but messy and undesirable
-- [ ] ~import~ helper method
+- [X] Split scheduler dependencies out into submodules of ~common-lander~
+- [X] Delete old ~cl_schedule~ and replace with ~_cl_schedule~
+- [X] ~import~ helper method
   - Need to be able to ~nil~ check both the target module and members
   - Use varargs for ergonomic multi-binding
-- [ ] Investigate unary function syntax abuse
+- [X] Investigate unary function syntax abuse
   - ~printf "foo"~ is valid Lua
   - ~set{1, 2, 3}~ is also valid Lua, where ~set~ is a unary function
-- [ ] Formalize use of ~__index~ and ~__newindex~ and ~__metatable~ for wrapper types
+- [X] Formalize use of ~__index~ and ~__newindex~ and ~__metatable~ for wrapper types
   - Currently using the basic offload-to-table behaviour in most cases
     - Results in a lot of manual unwrapping
   - Can use ~__newindex~ to prevent writes to keys
   - Should be able to replace ~newproxy~ hackery with ~__newindex~
   - Should be able to use ~__metatable~ to redirect past ~Named~ for typing purposes
+- [X] Formalize newtype abstraction
+  - Should be able to create a basic template newtype that points all methods to a given interior value, which is given as a higher-order constructor param
+*** To Do
+**** Project
+- [ ] Fix memory leak
+  - Likely caused by allocation of input / output tables during system execution
+    - Creates a lot of garbage; should use statically-allocated tables and clear them instead
+- [ ] Export machinery
+  - Dual to import machinery; override ~__newindex~ and prevent access to non-exported members
+- [ ] Concurrency pass
+  - Need to register all systems with minimal dependencies to prevent overconstraint
+- [ ] Fix Parallel allocation logic
+  - Curently over-allocating and leaving empties
+    - Not actively breaking anything, but messy and undesirable
 - [ ] Busyhands avoidance pass
   - Certain systems store references to objects without cleaning them up; they get overwritten with a fresh get before use, but keeping them around between invocations is not desirable
-- [ ] Formalize newtype abstraction
-  - Should be able to create a basic template newtype that points all methods to a given interior value, which is given as a higher-order constructor param
-- [ ] Factor out ~goldenorb_joint~
-  - Only exists as a dependency for the non-working offset aim code now ~goldenorb_recoil~ exists as an example of spring usage
+- [ ] Factor out ~gorb_joint~
+  - Only exists as a dependency for the non-working offset aim code now ~gorb_recoil~ exists as an example of spring usage
 - [ ] Setup automated releases via GitHub Actions
   - Necessary to resolve submodules, as the zip download omits them
 **** Core
@@ -456,7 +458,7 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Probably only tractable for free aim mode
 
 - [ ] Aimable knife
-  - Regular knife 'fires' from somewhere around the torso bone
+  - Regular knife 'fires' relative to the camera
   - Needs to hit from the blade in order to take advantage of decoupled aiming
   - Potential for fancy mouse-driven CQC with appropriate rotation control
     - Follow velocity, apply damage based on speed
@@ -468,7 +470,7 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
 
 **** Input
 - [ ] Disable mouse handler during menu
-    
+  
 **** Bodycam
 - [ ] Reengineer around new matrix setup
   - Should be able to calculate delta rotations for third-person bones and use them to drive animation offsets
@@ -555,5 +557,5 @@ Vector debug UI framework.
   - Perfect Dolg
   - Zulok
   - TimeSidors
-  - Escape From Tukarev
+  - Escape From Kruglov
   - Ungrehcord

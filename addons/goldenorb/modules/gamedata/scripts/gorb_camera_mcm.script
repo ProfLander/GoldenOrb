@@ -21,6 +21,7 @@ cl_import(this, {
       "C_CAM_FLAG",
       "C_NOT_CAM_FLAG",
    },
+   gorb_gimbals = {"inject_gimbals"},
    gorb_gimbals_comps = {"C_GIMBALS"},
    gorb_matrices = {"inject_matrices"},
    gorb_matrices_comps = {"C_MATRICES"},
@@ -119,7 +120,7 @@ inject_camera_gimbal = System.new("inject_camera_gimbal")
    :via(vector)
 
 on_level_call:concat(
-   gorb_before_build_state ..
+   inject_gimbals ..
    inject_camera_gimbal ..
    gorb_after_build_state
 )
@@ -133,7 +134,6 @@ derive_camera_matrix = System.new("derive_camera_matrix")
    end)
 
 on_level_call:concat(
-   inject_matrices ..
    inject_camera_gimbal ..
    derive_camera_matrix ..
    gorb_after_build_state

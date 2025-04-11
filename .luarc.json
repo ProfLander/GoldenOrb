@@ -92,5 +92,7 @@
         "gorb_recoil_comps",
         "gorb_springs_comps",
         "gorb_weapon_comps",
+        "cl_import",
+        "this",
     ],
 }

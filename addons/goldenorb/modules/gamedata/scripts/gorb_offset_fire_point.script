@@ -8,7 +8,7 @@ cl_import(this, {
    cl_system = {"System"},
    cl_schedule = {"on_level_call", "on_level_call_finish"},
    gorb_hud_comps = {"C_HUD", "C_FIRE_POINT", "C_FIRE_POINT2"},
-   gorb_main = {"gorb_before_build_state", "gorb_after_build_state"},
+   gorb_main = {"gorb_after_build_state"},
    gorb_weapon = {"inject_hud"},
    cl_math = {"EPSILON"}
 })
@@ -35,7 +35,6 @@ offset_fire_point = System.new("offset_fire_point")
    end)
 
 on_level_call(
-   gorb_before_build_state ..
    inject_hud ..
    offset_fire_point ..
    gorb_after_build_state

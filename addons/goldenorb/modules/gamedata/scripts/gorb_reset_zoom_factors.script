@@ -7,10 +7,7 @@
 cl_import(this, {
    cl_schedule = {"on_level_call"},
    cl_system = {"System"},
-   gorb_main = {
-      "gorb_before_build_state",
-      "gorb_after_build_state"
-   },
+   gorb_main = {"gorb_after_build_state"},
    gorb_hud_comps = {
       "C_HUD",
       "C_SCOPE_ZOOM_FACTOR",
@@ -40,7 +37,6 @@ reset_zoom_factors = System.new("reset_zoom_factors")
    end)
 
 on_level_call:concat(
-   gorb_before_build_state ..
    inject_hud ..
    reset_zoom_factors ..
    gorb_after_build_state

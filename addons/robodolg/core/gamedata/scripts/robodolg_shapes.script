@@ -127,7 +127,15 @@ function draw_line(pa, pb, color, f)
    assert(pa, "Invalid line end")
    color = color or vector():set(1, 1, 1)
 
-   local line = get_shape(DBG_ScriptObject.line):cast_dbg_line()
+   local line = get_shape(DBG_ScriptObject.line)
+   if not line then
+      return
+   end
+
+   line = line:cast_dbg_line()
+   if not line then
+      return
+   end
 
    line.point_a = pa
    line.point_b = pb

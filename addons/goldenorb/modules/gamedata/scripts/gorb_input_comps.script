@@ -10,6 +10,7 @@ cl_import(this, {
       "is_nil",
       "is_boolean",
       "is_number",
+      "is_string",
       "is_table"
    }
 })
@@ -25,3 +26,8 @@ C_KEY = Lens.where("key", is_number)
 
 C_MOUSE = Lens.where("mouse", is_table)
 C_OVERRIDE = Lens.where("override", is_boolean)
+
+C_GUI = Lens.where("gui", is_table)
+C_NAME = Lens.where("name", is_string)
+C_ID = Lens.where("id", is_string)
+C_NOT_ID = Prism.where("id", is_nil, is_string)

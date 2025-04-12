@@ -23,6 +23,8 @@ cl_import(this, {
       "C_KEY",
       "C_MOUSE",
       "C_OVERRIDE",
+      "C_GUI",
+      "C_NOT_ID",
    },
    gorb_gimbals_comps = {"C_GIMBALS"},
    gorb_actor_comps = {"C_ACTOR", "C_CROUCH_HEIGHT"},
@@ -117,7 +119,8 @@ handle_mouse = System.new("handle_mouse")
       C_GIMBALS .. C_CAMERA,
       C_GIMBALS .. C_HUD,
       C_CROUCH_HEIGHT,
-      C_GIMBAL_TARGET
+      C_GIMBAL_TARGET,
+      C_GUI .. C_NOT_ID
    )
    :writes(
       C_GIMBALS .. C_ACTOR,

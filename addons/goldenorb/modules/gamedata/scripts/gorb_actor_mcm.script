@@ -18,7 +18,9 @@ cl_import(this, {
    },
    gorb_actor_comps = {
       "C_ACTOR",
-      "C_NOT_ACTOR"
+      "C_NOT_ACTOR",
+      "C_CROUCH_HEIGHT",
+      "C_NOT_CROUCH_HEIGHT",
    },
    gorb_camera_comps = {
       "C_CAMERA"
@@ -51,15 +53,23 @@ page:settings(
       :text("actor")
 )
 
-eye_height, pelvis_height = page:settings(
+pelvis_height, eye_height, eye_depth, eye_strafe = page:settings(
+   Trackbar.new("pelvis_height")
+      :minmax(0, 1)
+      :increment(0.025)
+      :default(0.92),
    Trackbar.new("eye_height")
       :minmax(1, 2)
       :increment(0.025)
       :default(1.725),
-   Trackbar.new("pelvis_height")
-      :minmax(0, 1)
-      :increment(0.025)
-      :default(0.92)
+   Trackbar.new("eye_depth")
+      :minmax(-1, 1)
+      :increment(0.01)
+      :default(0.02),
+   Trackbar.new("eye_strafe")
+      :minmax(-1, 1)
+      :increment(0.01)
+      :default(0.1)
 )
 
 -- Implementation
@@ -74,6 +84,20 @@ inject_actor = System.new("inject_actor")
 on_level_call:concat(
    gorb_before_build_state ..
    inject_actor ..
+   gorb_after_build_state
+)
+
+--- Inject the player actor into the state
+inject_crouch_height = System.new("inject_crouch_height")
+   :reads(C_NOT_CROUCH_HEIGHT)
+   :writes(C_CROUCH_HEIGHT)
+   :via(function()
+      return 1
+   end)
+
+on_level_call:concat(
+   gorb_before_build_state ..
+   inject_crouch_height ..
    gorb_after_build_state
 )
 

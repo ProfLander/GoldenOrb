@@ -25,7 +25,7 @@ cl_import(this, {
       "C_OVERRIDE",
    },
    gorb_gimbals_comps = {"C_GIMBALS"},
-   gorb_actor_comps = {"C_ACTOR"},
+   gorb_actor_comps = {"C_ACTOR", "C_CROUCH_HEIGHT"},
    gorb_camera_comps = {"C_PELVIS", "C_CAMERA"},
    gorb_hud_comps = {"C_HUD"},
    gorb_mcm = {"tree"},
@@ -116,6 +116,7 @@ handle_mouse = System.new("handle_mouse")
       C_GIMBALS .. C_PELVIS,
       C_GIMBALS .. C_CAMERA,
       C_GIMBALS .. C_HUD,
+      C_CROUCH_HEIGHT,
       C_GIMBAL_TARGET
    )
    :writes(
@@ -123,6 +124,7 @@ handle_mouse = System.new("handle_mouse")
       C_GIMBALS .. C_PELVIS,
       C_GIMBALS .. C_CAMERA,
       C_GIMBALS .. C_HUD,
+      C_CROUCH_HEIGHT,
       C_MOUSE .. C_OVERRIDE
    )
    :via(
@@ -132,6 +134,7 @@ handle_mouse = System.new("handle_mouse")
          gimbal_pelvis,
          gimbal_camera,
          gimbal_hud,
+         crouch_height,
          target
       )
          local mouse_sens = get_console():get_float("mouse_sens")
@@ -153,10 +156,14 @@ handle_mouse = System.new("handle_mouse")
                gimbal_pelvis,
                vector():set(0, 0, -disp.x)
             )
+            --[[
             gimbal_camera = vector():add(
                gimbal_camera,
                vector():set(0, disp.y, 0)
             )
+            --]]
+            crouch_height = crouch_height + disp.y
+            printf("crouch_height: %s", crouch_height)
          elseif target == GT_CAMERA then
             gimbal_camera = vector():add(gimbal_camera, disp)
          elseif target == GT_HUD then
@@ -168,6 +175,7 @@ handle_mouse = System.new("handle_mouse")
             gimbal_pelvis,
             gimbal_camera,
             gimbal_hud,
+            crouch_height,
             true
       end
    )

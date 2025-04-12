@@ -14,10 +14,15 @@ cl_import(this, {
       "gorb_before_apply_state",
       "gorb_after_apply_state",
    },
-   gorb_actor_comps = {"C_ACTOR"},
+   gorb_actor_comps = {
+      "C_ACTOR",
+      "C_CROUCH_HEIGHT"
+   },
    gorb_actor_mcm = {
-      "eye_height",
       "pelvis_height",
+      "eye_height",
+      "eye_strafe",
+      "eye_depth",
    },
    gorb_camera_comps = {
       "C_CAMERA",
@@ -42,6 +47,8 @@ cl_import(this, {
       "Trackbar",
    }
 })
+
+local crouch_height = 0.5
 
 --- Logging
 local log = cl_logging.logger(
@@ -133,11 +140,15 @@ on_level_call:concat(
 
 --- Derive the pelvis matrix from the camera gimbal
 derive_pelvis_matrix = System.new("derive_pelvis_matrix")
-   :reads(C_GIMBALS .. C_PELVIS)
+   :reads(
+      C_GIMBALS .. C_PELVIS,
+      C_CROUCH_HEIGHT
+   )
    :writes(C_MATRICES .. C_PELVIS)
-   :via(function(gimbal_pelvis)
+   :via(function(gimbal_pelvis, crouch_height)
+      local height = pelvis_height:get() * crouch_height
       return matrix():mul(
-         matrix():identity():translate(0.1, pelvis_height:get(), 0),
+         matrix():identity():translate(0.0, height, 0),
          matrix():setHPB(gimbal_pelvis)
       )
    end)
@@ -162,12 +173,19 @@ on_level_call:concat(
 
 --- Derive the camera matrix from the camera gimbal
 derive_camera_matrix = System.new("derive_camera_matrix")
-   :reads(C_GIMBALS .. C_CAMERA)
+   :reads(
+      C_GIMBALS .. C_CAMERA,
+      C_CROUCH_HEIGHT
+   )
    :writes(C_MATRICES .. C_CAMERA)
-   :via(function(gimbal_camera)
-      local height = eye_height:get() - pelvis_height:get()
+   :via(function(gimbal_camera, crouch_height)
+      local height = (eye_height:get() - pelvis_height:get()) * crouch_height
       return matrix():mul(
-         matrix():identity():translate(0, height, 0),
+         matrix():identity():translate(
+            eye_strafe:get(),
+            height,
+            eye_depth:get()
+         ),
          matrix():setHPB(gimbal_camera)
       )
    end)

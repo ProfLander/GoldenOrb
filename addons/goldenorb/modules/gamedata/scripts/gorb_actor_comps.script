@@ -19,3 +19,6 @@ cl_import(this, {
 
 C_ACTOR = Lens.where("actor", is_non_nil)
 C_NOT_ACTOR = Prism.where("actor", is_nil, is_non_nil)
+
+C_CROUCH_HEIGHT = Lens.where("crouch_height", is_non_nil)
+C_NOT_CROUCH_HEIGHT = Prism.where("crouch_height", is_nil, is_non_nil)

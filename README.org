@@ -306,6 +306,7 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Should be able to use ~__metatable~ to redirect past ~Named~ for typing purposes
 - [X] Formalize newtype abstraction
   - Should be able to create a basic template newtype that points all methods to a given interior value, which is given as a higher-order constructor param
+- [X] Disable mouse handler during menu
 *** To Do
 **** Project
 - [ ] Fix memory leak
@@ -469,7 +470,6 @@ https://www.moddb.com/mods/stalker-anomaly/addons/position-and-view-v21-release
   - Regular bolt fires relative to the camera rather than the arms
 
 **** Input
-- [ ] Disable mouse handler during menu
   
 **** Bodycam
 - [ ] Reengineer around new matrix setup
@@ -544,6 +544,8 @@ Vector debug UI framework.
     - Can likely be cleaned up and refined
       - i.e. Remove hacks like offsetting bullets to prevent wall penetration
         - Correct solution is preventing the barrel from intersecting
+- [ ] Move HUD model push-back into a modded exes conditional
+  - Ideal to have full control over the HUD model without fighting against existing systems
 - [ ] Investigate custom camera clipping
   - Appears to have a different near plane to the regular FP camera
 - [ ] Expose a modded exes option for wallmark distance

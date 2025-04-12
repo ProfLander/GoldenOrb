@@ -12,15 +12,12 @@ cl_import(this, {
    cl_system = {"System"},
    cl_schedule = {
       "actor_on_update",
-      "actor_on_update_start",
-      "actor_on_update_finish",
       "on_level_call",
-      "on_level_call_start",
-      "on_level_call_finish",
    },
    gorb_main = {
       "gorb_before_modify_state",
       "gorb_after_modify_state",
+      "gorb_after_apply_state",
    },
    gorb_enable_comps = {"C_ENABLE"},
    gorb_robodolg_comps = {"C_ROBODOLG"},
@@ -43,16 +40,16 @@ inject_enable_robodolg = System.new("inject_enable_robodolg")
    end)
 
 on_level_call:concat(
-   on_level_call_start ..
+   on_level_call.start ..
    inject_enable_robodolg ..
-   on_level_call_finish
+   on_level_call.finish
 )
 
 reset_shapes = System.new("reset_shapes")
    :via(robodolg_shapes.reset)
 
 actor_on_update:concat(
-   actor_on_update_start ..
+   actor_on_update.start ..
    reset_shapes ..
    gorb_before_modify_state
 )
@@ -66,5 +63,5 @@ update_camera_matrix = System.new("update_camera_matrix")
 actor_on_update:concat(
    gorb_after_apply_state ..
    update_camera_matrix ..
-   actor_on_update_finish
+   actor_on_update.finish
 )

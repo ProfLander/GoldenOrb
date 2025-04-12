@@ -10,11 +10,7 @@ cl_import(this, {
    cl_system = {"System"},
    cl_schedule = {
       "actor_on_update",
-      "actor_on_update_start",
-      "actor_on_update_finish",
       "on_level_call",
-      "on_level_call_start",
-      "on_level_call_finish",
    },
 })
 
@@ -25,10 +21,10 @@ gorb_before_build_state = System.new("gorb_before_build_state")
 gorb_after_build_state = System.new("gorb_after_build_state")
 
 on_level_call:concat(
-   on_level_call_start ..
+   on_level_call.start ..
    gorb_before_build_state ..
    gorb_after_build_state ..
-   on_level_call_finish
+   on_level_call.finish
 )
 
 --- State modify barriers
@@ -40,11 +36,11 @@ gorb_before_apply_state = System.new("gorb_before_apply_state")
 gorb_after_apply_state = System.new("gorb_after_apply_state")
 
 actor_on_update:concat(
-   actor_on_update_start ..
+   actor_on_update.start ..
    gorb_before_modify_state ..
    gorb_after_modify_state ..
    gorb_before_apply_state ..
    gorb_after_apply_state ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 

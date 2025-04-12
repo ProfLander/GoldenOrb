@@ -6,7 +6,7 @@
 
 cl_import(this, {
    cl_system = {"System"},
-   cl_schedule = {"on_level_call", "on_level_call_finish"},
+   cl_schedule = {"on_level_call"},
    gorb_hud_comps = {"C_HUD", "C_FIRE_POINT", "C_FIRE_POINT2"},
    gorb_main = {"gorb_after_build_state"},
    gorb_weapon = {"inject_hud"},

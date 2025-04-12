@@ -5,7 +5,7 @@
 ----------------------------------------------------------------------------
 
 cl_import(this, {
-   cl_schedule = {"actor_on_update", "actor_on_update_start"},
+   cl_schedule = {"actor_on_update"},
    gorb_main = {"gorb_before_modify_state"},
    gorb_weapon = {"get_hud_number"},
    gorb_hud_comps = {"C_HUD", "C_AIM_HUD_OFFSET_ROT"},
@@ -114,7 +114,7 @@ apply_hud_offset_rot = System.new("apply_hud_offset_rot")
    end)
 
 actor_on_update:concat(
-   actor_on_update_start ..
+   actor_on_update.start ..
    apply_hud_offset_rot ..
    gorb_before_modify_state
 )

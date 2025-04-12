@@ -6,7 +6,7 @@
 
 cl_import(this, {
    cl_system = {"System"},
-   cl_schedule = {"on_level_call", "on_level_call_start"},
+   cl_schedule = {"on_level_call"},
    gorb_matrices_comps = {"C_MATRICES"},
    gorb_actor_comps = {"C_ACTOR"},
    gorb_camera_comps = {"C_CAMERA"},
@@ -88,7 +88,7 @@ robodolg_cache = System.new("robodolg_cache")
    end)
 
 on_level_call:concat(
-   on_level_call_start ..
+   on_level_call.start ..
    inject_robodolg_cache ..
    robodolg_cache ..
    gorb_before_build_state

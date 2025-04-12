@@ -10,8 +10,6 @@ cl_import(this, {
       "actor_on_update",
       "on_level_call",
       "actor_on_weapon_fired",
-      "actor_on_weapon_fired_start",
-      "actor_on_weapon_fired_finish",
    },
    gorb_main = {
       "gorb_before_build_state",
@@ -383,9 +381,9 @@ recoil_weapon = System.new("recoil_weapon")
    end)
 
 actor_on_weapon_fired:concat(
-   actor_on_weapon_fired_start ..
+   actor_on_weapon_fired.start ..
    recoil_weapon ..
-   actor_on_weapon_fired_finish
+   actor_on_weapon_fired.finish
 )
 
 --- Integrate recoil forces

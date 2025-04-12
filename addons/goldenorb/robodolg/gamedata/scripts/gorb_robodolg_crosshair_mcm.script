@@ -13,7 +13,7 @@ cl_import(this, {
    cl_types = {
       "is_boolean",
    },
-   cl_schedule = {"actor_on_update", "actor_on_update_finish"},
+   cl_schedule = {"actor_on_update"},
    gorb_robodolg_mcm = {"tree"},
    gorb_enable_comps = {"C_ENABLE"},
    gorb_actor_comps = {"C_ACTOR"},
@@ -224,5 +224,5 @@ actor_on_update:concat(
    draw_camera_crosshair ..
    draw_hud_crosshair ..
    draw_weapon_crosshair ..
-   actor_on_update_finish
+   actor_on_update.finish
 )

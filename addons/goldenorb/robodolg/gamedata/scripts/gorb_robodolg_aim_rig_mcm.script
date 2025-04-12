@@ -12,7 +12,6 @@ cl_import(this, {
    cl_schedule = {
       "on_level_call",
       "actor_on_update",
-      "actor_on_update_finish"
    },
    robodolg_shapes = {
       "RED",
@@ -94,7 +93,7 @@ draw_actor_aim = System.new("draw_actor_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_actor_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Circle around hands origin
@@ -115,7 +114,7 @@ draw_hands_origin = System.new("draw_hands_origin")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_hands_origin ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Line from hands origin to hands aim point
@@ -137,7 +136,7 @@ draw_hands_aim = System.new("draw_hands_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_hands_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Line from weapon barrel to weapon aim point
@@ -158,7 +157,7 @@ draw_weapon_aim = System.new("draw_weapon_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_weapon_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Line from actor aim point to camera aim point
@@ -179,7 +178,7 @@ draw_actor_camera_aim = System.new("draw_actor_camera_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_actor_camera_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Line from camera aim point to hands aim point
@@ -200,7 +199,7 @@ draw_camera_hands_aim = System.new("draw_camera_hands_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_camera_hands_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Line from camera aim point to weapon aim point
@@ -221,7 +220,7 @@ draw_camera_weapon_aim = System.new("draw_camera_weapon_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_camera_weapon_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 
 --- Triangle comprised of hands origin, hands aim, and weapon barrel
@@ -261,6 +260,6 @@ draw_hands_weapon_aim = System.new("draw_hands_weapon_aim")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_hands_weapon_aim ..
-   actor_on_update_finish
+   actor_on_update.finish
 )
 

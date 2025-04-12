@@ -16,6 +16,7 @@ cl_import(this, {
    robodolg_shapes = {
       "RED",
       "GREEN",
+      "BLUE",
       "CYAN",
       "MAGENTA",
       "YELLOW",
@@ -25,7 +26,7 @@ cl_import(this, {
    },
    robodolg_camera = {"ui_2d"},
    gorb_actor_comps = {"C_ACTOR"},
-   gorb_camera_comps = {"C_CAMERA"},
+   gorb_camera_comps = {"C_PELVIS", "C_CAMERA"},
    gorb_hud_comps = {"C_HUD"},
    gorb_weapon_comps = {"C_WEAPON"},
    gorb_enable_comps = {"C_ENABLE"},
@@ -75,24 +76,87 @@ on_level_call:concat(
    gorb_after_build_state
 )
 
---- Line from actor to its aim point
-draw_actor_aim = System.new("draw_actor_aim")
+--- Line from camera to its aim point
+draw_camera_aim = System.new("draw_camera_aim")
    :reads(
-      C_ROBODOLG_CACHE .. C_ACTOR .. C_POS,
-      C_ROBODOLG_CACHE .. C_ACTOR .. C_AIM,
+      C_ROBODOLG_CACHE .. C_CAMERA .. C_POS,
+      C_ROBODOLG_CACHE .. C_CAMERA .. C_AIM,
       C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_RIG
    )
-   :via(function(actor_pos, actor_aim)
+   :via(function(camera_pos, camera_aim)
       draw_line(
-         ui_2d(actor_pos, true)(vector()),
-         ui_2d(actor_aim, true)(vector()),
-         WHITE
+         ui_2d(camera_pos, true)(vector()),
+         ui_2d(camera_aim, true)(vector()),
+         BLUE
       )
    end)
 
 actor_on_update:concat(
    update_camera_matrix ..
-   draw_actor_aim ..
+   draw_camera_aim ..
+   actor_on_update.finish
+)
+
+--- Circle around actor origin
+draw_actor_origin = System.new("draw_actor_origin")
+   :reads(
+      C_ROBODOLG_CACHE .. C_ACTOR .. C_POS,
+      C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_RIG
+   )
+   :via(function(actor_pos)
+      draw_ngon(
+         0.02,
+         8,
+         WHITE,
+         ui_2d(actor_pos, true)
+      )
+   end)
+
+actor_on_update:concat(
+   update_camera_matrix ..
+   draw_actor_origin ..
+   actor_on_update.finish
+)
+
+--- Circle around pelvis origin
+draw_pelvis_origin = System.new("draw_pelvis_origin")
+   :reads(
+      C_ROBODOLG_CACHE .. C_PELVIS .. C_POS,
+      C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_RIG
+   )
+   :via(function(pelvis_pos)
+      draw_ngon(
+         0.02,
+         8,
+         WHITE,
+         ui_2d(pelvis_pos, true)
+      )
+   end)
+
+actor_on_update:concat(
+   update_camera_matrix ..
+   draw_pelvis_origin ..
+   actor_on_update.finish
+)
+
+--- Circle around camera origin
+draw_camera_origin = System.new("draw_camera_origin")
+   :reads(
+      C_ROBODOLG_CACHE .. C_CAMERA .. C_POS,
+      C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_RIG
+   )
+   :via(function(camera_pos)
+      draw_ngon(
+         0.02,
+         8,
+         BLUE,
+         ui_2d(camera_pos, true)
+      )
+   end)
+
+actor_on_update:concat(
+   update_camera_matrix ..
+   draw_camera_origin ..
    actor_on_update.finish
 )
 
@@ -114,6 +178,48 @@ draw_hands_origin = System.new("draw_hands_origin")
 actor_on_update:concat(
    update_camera_matrix ..
    draw_hands_origin ..
+   actor_on_update.finish
+)
+
+--- Line from actor origin to pelvis origin
+draw_actor_pelvis = System.new("draw_actor_pelvis")
+   :reads(
+      C_ROBODOLG_CACHE .. C_ACTOR .. C_POS,
+      C_ROBODOLG_CACHE .. C_PELVIS .. C_POS,
+      C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_RIG
+   )
+   :via(function(actor_pos, pelvis_pos)
+      draw_line(
+         ui_2d(actor_pos, true)(vector()),
+         ui_2d(pelvis_pos, true)(vector()),
+         WHITE
+      )
+   end)
+
+actor_on_update:concat(
+   update_camera_matrix ..
+   draw_actor_pelvis ..
+   actor_on_update.finish
+)
+
+--- Line from pelvis origin to camera origin
+draw_pelvis_camera = System.new("draw_pelvis_camera")
+   :reads(
+      C_ROBODOLG_CACHE .. C_PELVIS .. C_POS,
+      C_ROBODOLG_CACHE .. C_CAMERA .. C_POS,
+      C_ENABLE .. C_ROBODOLG .. C_DRAW_AIM_RIG
+   )
+   :via(function(pelvis_pos, camera_pos)
+      draw_line(
+         ui_2d(pelvis_pos, true)(vector()),
+         ui_2d(camera_pos, true)(vector()),
+         WHITE
+      )
+   end)
+
+actor_on_update:concat(
+   update_camera_matrix ..
+   draw_pelvis_camera ..
    actor_on_update.finish
 )
 

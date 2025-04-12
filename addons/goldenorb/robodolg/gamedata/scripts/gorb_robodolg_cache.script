@@ -9,7 +9,7 @@ cl_import(this, {
    cl_schedule = {"on_level_call"},
    gorb_matrices_comps = {"C_MATRICES"},
    gorb_actor_comps = {"C_ACTOR"},
-   gorb_camera_comps = {"C_CAMERA"},
+   gorb_camera_comps = {"C_PELVIS", "C_CAMERA"},
    gorb_hud_comps = {"C_HUD"},
    gorb_weapon_comps = {"C_WEAPON"},
    gorb_robodolg_cache_comps = {
@@ -37,19 +37,26 @@ robodolg_cache = System.new("robodolg_cache")
    :reads(
       C_WEAPON,
       C_MATRICES .. C_ACTOR,
+      C_MATRICES .. C_PELVIS,
       C_MATRICES .. C_CAMERA,
       C_MATRICES .. C_HUD
    )
    :writes(
       C_ROBODOLG_CACHE .. C_ACTOR,
+      C_ROBODOLG_CACHE .. C_PELVIS,
       C_ROBODOLG_CACHE .. C_CAMERA,
       C_ROBODOLG_CACHE .. C_HUD,
       C_ROBODOLG_CACHE .. C_WEAPON
    )
-   :via(function(weapon, mat_actor, mat_cam, mat_hud)
+   :via(function(weapon, mat_actor, mat_pelvis, mat_cam, mat_hud)
       local mat_hands = matrix():mul(
          mat_cam,
          mat_hud
+      )
+
+      local mat_pelv = matrix():mul(
+         mat_actor,
+         mat_pelvis
       )
 
       return
@@ -63,6 +70,17 @@ robodolg_cache = System.new("robodolg_cache")
                )
             ),
             rot = mat_actor:getHPB(),
+         },
+         {
+            pos = mat_pelv.c,
+            aim = vector():add(
+               mat_pelv.c,
+               vector():mul(
+                  mat_pelv.k,
+                  1000
+               )
+            ),
+            rot = mat_pelv:getHPB(),
          },
          {
             pos = mat_cam.c,

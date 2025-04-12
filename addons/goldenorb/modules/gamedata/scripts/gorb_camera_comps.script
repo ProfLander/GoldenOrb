@@ -14,6 +14,9 @@ cl_import(this, {
 C_CAMERA = Lens.where("camera", is_non_nil)
 C_NOT_CAMERA = Prism.where("camera", is_nil, is_non_nil)
 
+C_PELVIS = Lens.where("pelvis", is_non_nil)
+C_NOT_PELVIS = Prism.where("pelvis", is_nil, is_non_nil)
+
 C_CAM_FLAG = Lens.where("_cam_custom_position_direction", is_boolean)
 C_NOT_CAM_FLAG = Prism.where(
     "_cam_custom_position_direction", is_nil, is_boolean

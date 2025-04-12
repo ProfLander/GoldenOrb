@@ -18,6 +18,8 @@ cl_import(this, {
    gorb_camera_comps = {
       "C_CAMERA",
       "C_NOT_CAMERA",
+      "C_PELVIS",
+      "C_NOT_PELVIS",
       "C_CAM_FLAG",
       "C_NOT_CAM_FLAG",
    },
@@ -113,6 +115,39 @@ function camera_matrix()
    )
 end
 
+--- Inject the pelvis gimbal into the state
+inject_pelvis_gimbal = System.new("inject_pelvis_gimbal")
+   :reads(C_GIMBALS .. C_NOT_PELVIS)
+   :writes(C_GIMBALS .. C_PELVIS)
+   :via(vector)
+
+on_level_call:concat(
+   inject_gimbals ..
+   inject_pelvis_gimbal ..
+   gorb_after_build_state
+)
+
+local HEIGHT_STAND_EYE = 1.725
+local HEIGHT_STAND_PELVIS = 0.92
+local PELVIS_TO_EYE = HEIGHT_STAND_EYE - HEIGHT_STAND_PELVIS
+
+--- Derive the pelvis matrix from the camera gimbal
+derive_pelvis_matrix = System.new("derive_pelvis_matrix")
+   :reads(C_GIMBALS .. C_PELVIS)
+   :writes(C_MATRICES .. C_PELVIS)
+   :via(function(gimbal_pelvis)
+      return matrix():mul(
+         matrix():identity():translate(0, HEIGHT_STAND_PELVIS, 0),
+         matrix():setHPB(gimbal_pelvis)
+      )
+   end)
+
+on_level_call:concat(
+   inject_pelvis_gimbal ..
+   derive_pelvis_matrix ..
+   gorb_after_build_state
+)
+
 --- Inject the camera gimbal into the state
 inject_camera_gimbal = System.new("inject_camera_gimbal")
    :reads(C_GIMBALS .. C_NOT_CAMERA)
@@ -130,13 +165,32 @@ derive_camera_matrix = System.new("derive_camera_matrix")
    :reads(C_GIMBALS .. C_CAMERA)
    :writes(C_MATRICES .. C_CAMERA)
    :via(function(gimbal_camera)
-      return matrix():setHPB(gimbal_camera)
+      return matrix():mul(
+         matrix():identity():translate(0, PELVIS_TO_EYE, 0),
+         matrix():setHPB(gimbal_camera)
+      )
    end)
 
 on_level_call:concat(
    inject_camera_gimbal ..
    derive_camera_matrix ..
    gorb_after_build_state
+)
+
+camera_arm = System.new("camera_arm")
+   :reads(
+      C_MATRICES .. C_PELVIS,
+      C_MATRICES .. C_CAMERA
+   )
+   :writes(C_MATRICES .. C_CAMERA)
+   :via(function(mat_pelvis, mat_camera)
+      return matrix():mul(mat_pelvis, mat_camera)
+   end)
+
+actor_on_update:concat(
+   gorb_before_modify_state ..
+   camera_arm ..
+   gorb_after_modify_state
 )
 
 actor_relative_camera = System.new("actor_relative_camera")
@@ -150,27 +204,8 @@ actor_relative_camera = System.new("actor_relative_camera")
    end)
 
 actor_on_update:concat(
-   gorb_before_modify_state ..
-   actor_relative_camera ..
-   gorb_after_modify_state
-)
-
-camera_arm = System.new("camera_arm")
-   :reads(C_MATRICES .. C_CAMERA)
-   :writes(C_MATRICES .. C_CAMERA)
-   :via(function(mat_cam)
-      return matrix():mul(
-         matrix():identity():translate(0, 1.656, 0),
-         matrix():mul(
-            mat_cam,
-            matrix():identity():translate(0, 0, 0)
-         )
-      )
-   end)
-
-actor_on_update:concat(
-   actor_relative_camera ..
    camera_arm ..
+   actor_relative_camera ..
    gorb_after_modify_state
 )
 

@@ -9,11 +9,7 @@ cl_import(this, {
    cl_schedule = {
       "on_level_call",
       "on_before_mouse_move",
-      "on_before_mouse_move_start",
-      "on_before_mouse_move_finish",
       "on_key_press",
-      "on_key_press_start",
-      "on_key_press_finish",
    },
    gorb_main = {
       "gorb_before_build_state",
@@ -30,7 +26,7 @@ cl_import(this, {
    },
    gorb_gimbals_comps = {"C_GIMBALS"},
    gorb_actor_comps = {"C_ACTOR"},
-   gorb_camera_comps = {"C_CAMERA"},
+   gorb_camera_comps = {"C_PELVIS", "C_CAMERA"},
    gorb_hud_comps = {"C_HUD"},
    gorb_mcm = {"tree"},
    mcm_builder = {"KeybindBox"},
@@ -54,9 +50,10 @@ local cycle_gimbal = page:settings(
 -- Implementation
 
 GT_ACTOR = 0
-GT_CAMERA = 1
-GT_HUD = 2
-GT_MAX = 3
+GT_PELVIS = 1
+GT_CAMERA = 2
+GT_HUD = 3
+GT_MAX = 4
 
 inject_gimbal_target = System.new("inject_gimbal_target")
    :reads(C_NOT_GIMBAL_TARGET)
@@ -90,6 +87,7 @@ cycle_gimbal_target = System.new("cycle_gimbal_target")
       log("  target: %s", target)
 
       local msg = target == GT_ACTOR and "Actor"
+               or target == GT_PELVIS and "Pelvis"
                or target == GT_CAMERA and "Camera"
                or target == GT_HUD and "HUD"
 
@@ -106,21 +104,23 @@ cycle_gimbal_target = System.new("cycle_gimbal_target")
    end)
 
 on_key_press:concat(
-   on_key_press_start ..
+   on_key_press.start ..
    cycle_gimbal_target ..
-   on_key_press_finish
+   on_key_press.finish
 )
 
 handle_mouse = System.new("handle_mouse")
    :reads(
       C_MOUSE,
       C_GIMBALS .. C_ACTOR,
+      C_GIMBALS .. C_PELVIS,
       C_GIMBALS .. C_CAMERA,
       C_GIMBALS .. C_HUD,
       C_GIMBAL_TARGET
    )
    :writes(
       C_GIMBALS .. C_ACTOR,
+      C_GIMBALS .. C_PELVIS,
       C_GIMBALS .. C_CAMERA,
       C_GIMBALS .. C_HUD,
       C_MOUSE .. C_OVERRIDE
@@ -129,6 +129,7 @@ handle_mouse = System.new("handle_mouse")
       function(
          mouse,
          gimbal_actor,
+         gimbal_pelvis,
          gimbal_camera,
          gimbal_hud,
          target
@@ -147,18 +148,32 @@ handle_mouse = System.new("handle_mouse")
                gimbal_camera,
                vector():set(0, disp.y, disp.z)
             )
+         elseif target == GT_PELVIS then
+            gimbal_pelvis = vector():add(
+               gimbal_pelvis,
+               vector():set(0, 0, -disp.x)
+            )
+            gimbal_camera = vector():add(
+               gimbal_camera,
+               vector():set(0, disp.y, 0)
+            )
          elseif target == GT_CAMERA then
             gimbal_camera = vector():add(gimbal_camera, disp)
          elseif target == GT_HUD then
             gimbal_hud = vector():add(gimbal_hud, disp)
          end
 
-         return gimbal_actor, gimbal_camera, gimbal_hud, true
+         return
+            gimbal_actor,
+            gimbal_pelvis,
+            gimbal_camera,
+            gimbal_hud,
+            true
       end
    )
 
 on_before_mouse_move:concat(
-   on_before_mouse_move_start ..
+   on_before_mouse_move.start ..
    handle_mouse ..
-   on_before_mouse_move_finish
+   on_before_mouse_move.finish
 )

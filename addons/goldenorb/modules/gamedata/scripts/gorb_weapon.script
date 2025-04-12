@@ -28,7 +28,7 @@ cl_import(this, {
       "DEG2RAD",
       "hpb_to_direction",
    },
-   gorb_actor = {"inject_actor"},
+   gorb_actor_mcm = {"inject_actor"},
    cl_table = {"map", "foreach"},
    cl_system = {"System"},
 })

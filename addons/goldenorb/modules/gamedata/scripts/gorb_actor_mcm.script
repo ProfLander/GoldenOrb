@@ -34,8 +34,33 @@ cl_import(this, {
    },
    gorb_matrices_comps = {
       "C_MATRICES"
+   },
+   gorb_mcm = {"tree"},
+   mcm_builder = {
+      "Page",
+      "ImageWithText",
+      "Title",
+      "Trackbar",
    }
 })
+
+page = tree:pages("actor")
+
+page:settings(
+   ImageWithText.new("actor_title")
+      :text("actor")
+)
+
+eye_height, pelvis_height = page:settings(
+   Trackbar.new("eye_height")
+      :minmax(1, 2)
+      :increment(0.025)
+      :default(1.725),
+   Trackbar.new("pelvis_height")
+      :minmax(0, 1)
+      :increment(0.025)
+      :default(0.92)
+)
 
 -- Implementation
 

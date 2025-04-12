@@ -15,6 +15,10 @@ cl_import(this, {
       "gorb_after_apply_state",
    },
    gorb_actor_comps = {"C_ACTOR"},
+   gorb_actor_mcm = {
+      "eye_height",
+      "pelvis_height",
+   },
    gorb_camera_comps = {
       "C_CAMERA",
       "C_NOT_CAMERA",
@@ -127,17 +131,13 @@ on_level_call:concat(
    gorb_after_build_state
 )
 
-local HEIGHT_STAND_EYE = 1.725
-local HEIGHT_STAND_PELVIS = 0.92
-local PELVIS_TO_EYE = HEIGHT_STAND_EYE - HEIGHT_STAND_PELVIS
-
 --- Derive the pelvis matrix from the camera gimbal
 derive_pelvis_matrix = System.new("derive_pelvis_matrix")
    :reads(C_GIMBALS .. C_PELVIS)
    :writes(C_MATRICES .. C_PELVIS)
    :via(function(gimbal_pelvis)
       return matrix():mul(
-         matrix():identity():translate(0, HEIGHT_STAND_PELVIS, 0),
+         matrix():identity():translate(0.1, pelvis_height:get(), 0),
          matrix():setHPB(gimbal_pelvis)
       )
    end)
@@ -165,8 +165,9 @@ derive_camera_matrix = System.new("derive_camera_matrix")
    :reads(C_GIMBALS .. C_CAMERA)
    :writes(C_MATRICES .. C_CAMERA)
    :via(function(gimbal_camera)
+      local height = eye_height:get() - pelvis_height:get()
       return matrix():mul(
-         matrix():identity():translate(0, PELVIS_TO_EYE, 0),
+         matrix():identity():translate(0, height, 0),
          matrix():setHPB(gimbal_camera)
       )
    end)
